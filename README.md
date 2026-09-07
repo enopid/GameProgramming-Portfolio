@@ -30,14 +30,14 @@ DirectX 9·11과 WinAPI 환경에서 직접 설계하고 구현한 게임 프로
 | [Partner Combat](Content/Hi-Fi-RUSH/Partner-Combat/README.md) | Hi-Fi RUSH | 페퍼민트: 배리어·레이저<br>코르시카: 화염·회오리<br>마카롱: 실드·경직 |
 | [Partner Gimmicks](Content/Hi-Fi-RUSH/Partner-Gimmicks/README.md) | Hi-Fi RUSH | 페퍼민트: Aim Offset·원거리 조작<br>마카롱: 리듬 판정·파괴 벽<br>코르시카: 리듬 판정·기믹 연동 |
 | [Locomotion·Hair](Content/Celeste/Locomotion-and-Hair/README.md) | Celeste | 이동·점프·벽타기<br>2단 대시<br>다관절 머리카락 |
-| [Auto Tiling](Content/Celeste/Auto-Tiling/README.md) | Celeste | 인접 타일 Bitmask<br>Atlas 자동 선택<br>연결 타일 갱신 |
+| [Auto Tiling](Content/Celeste/Auto-Tiling/README.md) | Celeste | 스테이지 에디터<br>인접 타일 Bitmask<br>Atlas 자동 선택<br>연결 타일 갱신 |
 | [Theme Effects](Content/Celeste/Theme-Effects/README.md) | Celeste | 얼음·용암 색조<br>아지랑이<br>경계 전이<br>Parallax Scrolling |
 | [Theme Gimmicks](Content/Celeste/Theme-Gimmicks/README.md) | Celeste | 테마별 기믹 전환<br>충돌 기반 테마 변경<br>원작 외 보스전 |
 | [Input Correction](Content/Celeste/Input-Correction/README.md) | Celeste | Coyote Time<br>Jump Buffer·Variable Jump<br>Dash 입력 지연 |
 | [Sprite Stack](Content/Toodee-and-Topdee/Sprite-Stack/README.md) | Toodee and Topdee | 파츠별 깊이 배치<br>회전·위치 보정<br>Billboard<br>2D 스프라이트 입체화 |
 | [Bat·Pig](Content/Toodee-and-Topdee/Monsters/README.md) | Toodee and Topdee | 2D 좌우 순찰<br>3D 플레이어 추적<br>전방 지면 감지 |
 | [Boss·Ozraeen](Content/Toodee-and-Topdee/Boss/README.md) | Toodee and Topdee | FSM 보스 공통 클래스<br>상태·패턴 그룹<br>피격·연출 분리 |
-| [Gimmick Objects](Content/Toodee-and-Topdee/Gimmicks/README.md) | Toodee and Topdee | Laser: 연속 반사<br>Fire Turret: Object Pool<br>Thunder: Ray Casting<br>Box: Grid·재귀 탐색 |
+| [Gimmick Objects](Content/Toodee-and-Topdee/Gimmicks/README.md) | Toodee and Topdee | Laser: 연속 반사<br>Fire Turret: Object Pool<br>Lightning: Ray Casting<br>Hole: 낙하 판정<br>Box: Grid·재귀 탐색 |
 
 ## Hi-Fi RUSH 프레임워크
 

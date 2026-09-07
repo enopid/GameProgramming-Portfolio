@@ -1,12 +1,27 @@
 # Auto Tiling
 
-인접 타일 비트마스크와 Atlas 자동 선택, 연결 타일 갱신에 사용한 코드입니다.
+스테이지 에디터에서 인접 타일을 판별하고 Atlas 좌표를 자동 선택하며 주변 타일을 갱신하는 코드입니다.
+
+## 클래스 구조
+
+```mermaid
+classDiagram
+    CScene <|-- CEditorScene
+    CObject <|-- CTile
+    CTile <|-- CTileSetTile
+    CEditorScene --> CObject : map raw pointers
+    CEditorScene --> CTileSetTile : creates and updates
+    CTile --> CSprite : raw reference
+```
+
+`<|--` 상속 · `-->` 비소유 사용/참조
 
 ## 포함 파일
 
 | 구현 단위 | 헤더 | 구현 |
 |---|---|---|
 | `CTileSetTile` | `Include/CTileSetTile.h` | `Source/CTileSetTile.cpp` |
+| `EditorScene` | `Include/EditorScene.h` | `Source/EditorScene.cpp` |
 | `Stage` | `Include/Stage.h` | `Source/Stage.cpp` |
 | `Tile` | `Include/Tile.h` | `Source/Tile.cpp` |
 
