@@ -4,14 +4,11 @@
 
 ## 포함 파일
 
-| 파일 | 구분 |
-|---|---|
-| `Include/BackGround.h` | Header |
-| `Include/Boundary.h` | Header |
-| `Include/BoundaryBlock.h` | Header |
-| `Shaders/PP_Fire.fx` | Shader |
-| `Source/BackGround.cpp` | Source |
-| `Source/Boundary.cpp` | Source |
-| `Source/BoundaryBlock.cpp` | Source |
+| 구현 단위 | 헤더 | 구현 |
+|---|---|---|
+| `BackGround` | `Include/BackGround.h` | `Source/BackGround.cpp` |
+| `Boundary` | `Include/Boundary.h` | `Source/Boundary.cpp` |
+| `BoundaryBlock` | `Include/BoundaryBlock.h` | `Source/BoundaryBlock.cpp` |
+| `PP_Fire` | — | `Shaders/PP_Fire.fx` |
 
 > 전체 프로젝트의 빌드 의존성은 포함하지 않았으며, 구현 흐름을 확인하는 데 필요한 범위까지만 선별했습니다.

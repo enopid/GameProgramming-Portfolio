@@ -4,11 +4,9 @@
 
 ## 포함 파일
 
-| 파일 | 구분 |
-|---|---|
-| `Include/BaseCamera.h` | Header |
-| `Include/HybridCamera.h` | Header |
-| `Source/BaseCamera.cpp` | Source |
-| `Source/HybridCamera.cpp` | Source |
+| 구현 단위 | 헤더 | 구현 |
+|---|---|---|
+| `BaseCamera` | `Include/BaseCamera.h` | `Source/BaseCamera.cpp` |
+| `HybridCamera` | `Include/HybridCamera.h` | `Source/HybridCamera.cpp` |
 
 > 전체 프로젝트의 빌드 의존성은 포함하지 않았으며, 구현 흐름을 확인하는 데 필요한 범위까지만 선별했습니다.

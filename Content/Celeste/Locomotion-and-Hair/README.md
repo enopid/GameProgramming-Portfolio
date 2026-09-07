@@ -4,11 +4,9 @@
 
 ## 포함 파일
 
-| 파일 | 구분 |
-|---|---|
-| `Include/Hair.h` | Header |
-| `Include/Player.h` | Header |
-| `Source/Hair.cpp` | Source |
-| `Source/Player.cpp` | Source |
+| 구현 단위 | 헤더 | 구현 |
+|---|---|---|
+| `Hair` | `Include/Hair.h` | `Source/Hair.cpp` |
+| `Player` | `Include/Player.h` | `Source/Player.cpp` |
 
 > 전체 프로젝트의 빌드 의존성은 포함하지 않았으며, 구현 흐름을 확인하는 데 필요한 범위까지만 선별했습니다.

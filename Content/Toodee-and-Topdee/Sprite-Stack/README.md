@@ -4,17 +4,12 @@
 
 ## 포함 파일
 
-| 파일 | 구분 |
-|---|---|
-| `Include/Topdee_Body.h` | Header |
-| `Include/Topdee_Hands.h` | Header |
-| `Include/Topdee_Legs.h` | Header |
-| `Include/Topdee_Parts.h` | Header |
-| `Include/Topdee.h` | Header |
-| `Source/Topdee_Body.cpp` | Source |
-| `Source/Topdee_Hands.cpp` | Source |
-| `Source/Topdee_Legs.cpp` | Source |
-| `Source/Topdee_Parts.cpp` | Source |
-| `Source/Topdee.cpp` | Source |
+| 구현 단위 | 헤더 | 구현 |
+|---|---|---|
+| `Topdee` | `Include/Topdee.h` | `Source/Topdee.cpp` |
+| `Topdee_Body` | `Include/Topdee_Body.h` | `Source/Topdee_Body.cpp` |
+| `Topdee_Hands` | `Include/Topdee_Hands.h` | `Source/Topdee_Hands.cpp` |
+| `Topdee_Legs` | `Include/Topdee_Legs.h` | `Source/Topdee_Legs.cpp` |
+| `Topdee_Parts` | `Include/Topdee_Parts.h` | `Source/Topdee_Parts.cpp` |
 
 > 전체 프로젝트의 빌드 의존성은 포함하지 않았으며, 구현 흐름을 확인하는 데 필요한 범위까지만 선별했습니다.
