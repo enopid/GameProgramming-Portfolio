@@ -1,6 +1,6 @@
 #include "BT_RandomSelector.h"
 
-CBT_RandomSelector::CBT_RandomSelector()
+CBT_RandomSelector::CBT_RandomSelector() : CBT_Composit()
 {
 }
 
@@ -20,12 +20,10 @@ CBT_Node::ESTATE CBT_RandomSelector::Update(_float fTimeDelta)
     }
     else if (eState == ESTATE::ES_SUCCESS) {
         m_iCurrentChildIdx = GetNextChildIdx();
-        Exit();
         return eState;
     }
     else if (eState == ESTATE::ES_FAIL) {
         m_iCurrentChildIdx = GetNextChildIdx();
-        Exit();
         return eState;
     }
     return ESTATE::ES_FAIL;
@@ -35,7 +33,7 @@ CBT_RandomSelector* CBT_RandomSelector::Create(void* pArg)
 {
     CBT_RandomSelector* pSequence = new CBT_RandomSelector();
     if (FAILED(pSequence->Initialize(pArg))) {
-        MSG_BOX("Fail to Create Sequence");
+        MSG_BOX("Fail to Create Random Selctor");
         return nullptr;
     }
     return pSequence;
@@ -49,7 +47,7 @@ HRESULT CBT_RandomSelector::AddChildNode(CBT_Node* pChildNode)
 HRESULT CBT_RandomSelector::AddChildNode(CBT_Node* pChildNode, _float fWeight)
 {
     m_vecWeights.push_back(fWeight);
-    return __super::AddChildNode(pChildNode);;
+    return __super::AddChildNode(pChildNode);
 }
 
 _uint CBT_RandomSelector::GetNextChildIdx()

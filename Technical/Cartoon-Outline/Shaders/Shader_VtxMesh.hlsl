@@ -113,12 +113,13 @@ VS_OUT VS_SPLINE_MAIN(VS_IN In)
     VS_OUT Out;
     
     float3 vLocalPos = In.vPosition + g_vSplineOffset.xyz;
+    
     //spline
-    float t = saturate(vLocalPos.z / g_vSplineOffset.w);
-    float segmentF = t * (NUMSPLINESAMPLE - 1);
-    int idx0 = (int) segmentF;
-    int idx1 = min(idx0 + 1, NUMSPLINESAMPLE - 1);
-    float localT = frac(segmentF);
+    float t         = saturate(vLocalPos.z / g_vSplineOffset.w);
+    float segmentF  = t * (NUMSPLINESAMPLE - 1);
+    float localT    = frac(segmentF);
+    int idx0        = (int) segmentF;
+    int idx1        = min(idx0 + 1, NUMSPLINESAMPLE - 1);
     
     // spline sample
     float3 vUp, vForward, vRight;
@@ -131,9 +132,7 @@ VS_OUT VS_SPLINE_MAIN(VS_IN In)
     float3 tan1 = normalize(g_vSplineTanget[idx1].xyz);
     vForward = normalize(lerp(tan0, tan1, localT));
     vUp = float3(0, 1, 0);
-    if (abs(dot(vUp, vForward)) > 0.99f)
-        vUp = float3(1, 0, 0);
-
+    if (abs(dot(vUp, vForward)) > 0.99f) vUp = float3(1, 0, 0);
     vRight  = normalize(cross(vUp, vForward));
     vUp = normalize(cross(vForward, vRight));
     
@@ -144,8 +143,7 @@ VS_OUT VS_SPLINE_MAIN(VS_IN In)
         vUp     * vLocalPos.y;
     
     // tangent space
-    float3x3 vBasis =
-    {
+    float3x3 vBasis = {
         vRight,
         vUp,
         vForward

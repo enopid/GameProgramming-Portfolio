@@ -31,7 +31,7 @@ void CVIBuffer_Terrain::Update(float fDeltatTime)
 	if (!m_bIsDynamicBuffer) return;
 	if (m_bIsHeightDirty) {
 		CalcNormals();
-		// ½ÇÁ¦ »ðÀÔ
+		// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		D3D11_MAPPED_SUBRESOURCE mapped;
 		if (FAILED(m_pContext->Map(m_pVB, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped))) {
 			MSG_BOX("Fail to Map Dynamic Buffer");
@@ -144,7 +144,7 @@ HRESULT CVIBuffer_Terrain::AdjustSize()
 	m_vecNeighbourCellIndices.resize(m_iNumCells);
 	for (_uint i = 0; i < m_iNumCells; i++)
 	{
-		if (i % 2) { //¾Æ·¡ÂÊ
+		if (i % 2) { //ï¿½Æ·ï¿½ï¿½ï¿½
 			m_vecNeighbourCellIndices[i][0] = i - 1;
 			m_vecNeighbourCellIndices[i][1] = (i / (2 * (m_desc.m_iNumVerticesX - 1))) ? (i - 2 * m_desc.m_iNumVerticesX + 1) : -1;
 			m_vecNeighbourCellIndices[i][2] = (i % (2 * (m_desc.m_iNumVerticesX - 1))) ? (i - 3) : -1;
@@ -385,7 +385,7 @@ HRESULT CVIBuffer_Terrain::CreateSplatTexture()
 	desc.Height = 2048;
 	desc.MipLevels = 1;
 	desc.ArraySize = 1;
-	desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;   // ½ºÇÃ·§
+	desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;   // ï¿½ï¿½ï¿½Ã·ï¿½
 	desc.SampleDesc.Count = 1;
 	desc.Usage = D3D11_USAGE_DEFAULT;
 	desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
@@ -651,8 +651,8 @@ void CVIBuffer_Terrain::ApplyHeightBrush(_vector vBrushCenter, _uint iOperationT
 			}
 			break;
 		case Engine::CVIBuffer_Terrain::EOPERATIONTYPE::TARGETSLOPE:
-			//fAmount0°¡ ±â¿ï±â Á¤µµ	[-HALF_PI,HALF_PI]
-			//fAmount1°¡ °¢µµ			[0,2PI]
+			//fAmount0ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½	[-HALF_PI,HALF_PI]
+			//fAmount1ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½			[0,2PI]
 			{
 				
 				_vector _vDir = XMVectorSet(cos(XMConvertToRadians(fDir)), 0.f, sin(XMConvertToRadians(fDir)), 0.f);
@@ -675,6 +675,7 @@ void CVIBuffer_Terrain::ApplyHeightBrush(_vector vBrushCenter, _uint iOperationT
 
 void CVIBuffer_Terrain::ApplySplatBrush(_vector vBrushCenter, _uint iOperationType, _vector vWeight, _float fRadius, _float fSharpness, _float fStrength, _float fNoiseSrt, _float fNoiseDst)
 {
+	fStrength *= 0.05f;
 	vector<pair<_uint, _vector>> vecSmoothPts;
 	auto iSizeX = 2048;
 	auto iSizeY = 2048;
@@ -718,14 +719,14 @@ void CVIBuffer_Terrain::ApplySplatBrush(_vector vBrushCenter, _uint iOperationTy
 			_vNextValue = _vPrevValue - vWeight * _fRatio * fStrength;
 			break;
 		case Engine::CVIBuffer_Terrain::ESPLATOPERATIONTYPE::ERASE:
+			_vNextValue = _vPrevValue - vWeight * _fRatio * fStrength;
 			break;
 		case Engine::CVIBuffer_Terrain::ESPLATOPERATIONTYPE::SMOOTH:
 		{
 			_vector avg = XMVectorSet(0.f, 0.f, 0.f, 0.f);
 			float avgCnt = 0;
 			_uint _x(i), _y(j);
-			for (auto [_dx, _dy] : { pair{-1,-1}, pair{-1,0}, pair{-1,1}, pair{0,-1}, pair{0,1}, pair{1,-1}, pair{1,0}, pair{1,1} })
-			{
+			for (auto [_dx, _dy] : { pair{-1,-1}, pair{-1,0}, pair{-1,1}, pair{0,-1}, pair{0,1}, pair{1,-1}, pair{1,0}, pair{1,1} }) {
 				_uint _nx(_x + _dx), _ny(_y + _dy);
 				if (_nx < 0 || _nx >= iSizeX || _ny < 0 || _ny >= iSizeY) continue;
 				avg += XMLoadFloat4(&m_vecSplatMap[_nx + _ny * iSizeX]);
@@ -736,10 +737,6 @@ void CVIBuffer_Terrain::ApplySplatBrush(_vector vBrushCenter, _uint iOperationTy
 				_vNextValue = lerp(_vPrevValue, avg, _fRatio);
 			}
 		}
-			break;
-		case Engine::CVIBuffer_Terrain::ESPLATOPERATIONTYPE::END:
-			break;
-		default:
 			break;
 		}
 		_vNextValue = XMVector4Normalize(XMVectorClamp(_vNextValue, XMVectorSet(0.01f, 0.01f, 0.01f, 0.01f), XMVectorSet(1.f, 1.f, 1.f, 1.f)));
@@ -978,6 +975,7 @@ void CVIBuffer_Terrain::Render_Inspector()
 	}
 	ImGui::PopID();
 	ImGui::DragFloat4	("TileScale",	reinterpret_cast<_float*>(&m_desc.m_vSplatScale), 0.01f);
+	ImGui::DragFloat	("Transition",	&m_desc.m_fHeightScale, 0.005f,0.001f, 0.99f);
 }
 
 HRESULT CVIBuffer_Terrain::Save(void* _pDesc, _uint& _iSize) const

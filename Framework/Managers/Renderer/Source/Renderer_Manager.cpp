@@ -5,10 +5,10 @@
 #include"Mesh.h"
 #include"MeshRenderer.h"
 
-Engine::CRenderer_Manager::CRenderer_Manager(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-	:m_pDevice{ pDevice },
-	m_pContext{ pContext },
-	m_pGameInstance{ CGameInstance::GetInstance() }
+Engine::CRenderer_Manager::CRenderer_Manager(ID3D11Device* pDevice, ID3D11DeviceContext* pContext) 
+	:m_pDevice{ pDevice }, 
+	m_pContext{ pContext }, 
+	m_pGameInstance{ CGameInstance::GetInstance() } 
 {
 	Engine::Safe_AddRef(m_pDevice);
 	Engine::Safe_AddRef(m_pContext);
@@ -23,7 +23,7 @@ HRESULT Engine::CRenderer_Manager::Initialize()
 	// RenderTarget
 	// OBJ - Common
 	CHKFAIL(m_pGameInstance->Add_RenderTarget(L"TargetDiffuseB", (Engine::_uint)Desc.Width, (Engine::_uint)Desc.Height, DXGI_FORMAT_R8G8B8A8_UNORM, Engine::_float4(0.f, 0.f, 0.f, 0.f)));
-	CHKFAIL(m_pGameInstance->Add_RenderTarget(L"TargetNormal", (Engine::_uint)Desc.Width, (Engine::_uint)Desc.Height, DXGI_FORMAT_R8G8B8A8_SNORM, Engine::_float4(0.f, 0.f, 0.f, 0.f)));
+	CHKFAIL(m_pGameInstance->Add_RenderTarget(L"TargetNormal",	(Engine::_uint)Desc.Width, (Engine::_uint)Desc.Height, DXGI_FORMAT_R8G8B8A8_SNORM, Engine::_float4(0.f, 0.f, 0.f, 0.f)));
 	CHKFAIL(m_pGameInstance->Add_RenderTarget(L"TargetDepth", (Engine::_uint)Desc.Width, (Engine::_uint)Desc.Height, DXGI_FORMAT_R32_FLOAT, Engine::_float4(1.f, 1.f, 0.f, 1.f)));
 	CHKFAIL(m_pGameInstance->Add_RenderTarget(L"TargetEmissive", (Engine::_uint)Desc.Width, (Engine::_uint)Desc.Height, DXGI_FORMAT_R11G11B10_FLOAT, Engine::_float4(0.f, 0.f, 0.f, 1.f)));
 	// OBJ - NonAnim
@@ -94,8 +94,8 @@ HRESULT Engine::CRenderer_Manager::Initialize()
 	m_Viewports[0] = Desc;
 	for (size_t i = 0; i < 5; i++)
 	{
-		XMStoreFloat4x4(&m_matDSWorlds[i], XMMatrixScaling(m_Viewports[i].Width, m_Viewports[i].Height, 1.f));
-		XMStoreFloat4x4(&m_matDSProjections[i], XMMatrixOrthographicLH(m_Viewports[i].Width, m_Viewports[i].Height, 0.f, 1.f));
+	    XMStoreFloat4x4(&m_matDSWorlds[i],		XMMatrixScaling			(m_Viewports[i].Width, m_Viewports[i].Height, 1.f));
+		XMStoreFloat4x4(&m_matDSProjections[i],	XMMatrixOrthographicLH	(m_Viewports[i].Width, m_Viewports[i].Height, 0.f, 1.f));
 
 		if (i == 4) break;
 
@@ -115,7 +115,7 @@ HRESULT Engine::CRenderer_Manager::Initialize()
 		return E_FAIL;
 	m_pSSShader = { Engine::CShader::Create<VTXPOSTEX>(m_pDevice, m_pContext, L"../Bin/Shaders/Shader_ScreenSpace.hlsl") };
 	if (!m_pSSShader) return E_FAIL;
-
+	
 	m_pPPShader = { Engine::CShader::Create<VTXPOSTEX>(m_pDevice, m_pContext, L"../Bin/Shaders/Shader_PostProcessing.hlsl") };
 	if (!m_pPPShader) return E_FAIL;
 
@@ -130,10 +130,8 @@ HRESULT Engine::CRenderer_Manager::Initialize()
 
 	SetAdditionalWeights();
 
-	//CHKFAIL(ReadyWholeRT());	//only whole RT
-
-	return S_OK;
-}
+    return S_OK;
+} 
 
 void CRenderer_Manager::InitRSStates()
 {
@@ -163,7 +161,7 @@ void CRenderer_Manager::InitBSStates()
 	desc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
 	m_pDevice->CreateBlendState(&desc, &m_pBS_Opaque);
-
+	
 	desc = {};
 	// Alpha Blend
 	desc.RenderTarget[0].BlendEnable = TRUE;
@@ -182,14 +180,14 @@ void CRenderer_Manager::InitBSStates()
 
 	desc = {};
 	// Additive
-	desc.RenderTarget[0].BlendEnable = TRUE;
-	desc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
-	desc.RenderTarget[0].DestBlend = D3D11_BLEND_ONE;
-	desc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+	desc.RenderTarget[0].BlendEnable	= TRUE;
+	desc.RenderTarget[0].SrcBlend		= D3D11_BLEND_SRC_ALPHA;
+	desc.RenderTarget[0].DestBlend		= D3D11_BLEND_ONE;
+	desc.RenderTarget[0].BlendOp		= D3D11_BLEND_OP_ADD;
 
-	desc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+	desc.RenderTarget[0].SrcBlendAlpha	= D3D11_BLEND_ONE;
 	desc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
-	desc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+	desc.RenderTarget[0].BlendOpAlpha	= D3D11_BLEND_OP_ADD;
 
 	desc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
@@ -348,13 +346,13 @@ void CRenderer_Manager::Bind_RSParameters(RSPARAM_DESC _desc)
 	m_pContext->RSSetState(pRS);
 
 	ID3D11BlendState* pBS = nullptr;
-	if (_desc.iBlendType == 0)  // Opaque
+	if		(_desc.iBlendType == 0)  // Opaque
 		pBS = m_pBS_Opaque;
 	else if (_desc.iBlendType == 1)  // AlphaBlend
 		pBS = m_pBS_AlphaBlend;
 	else if (_desc.iBlendType == 2)  // Additive
 		pBS = m_pBS_Additive;
-
+	
 	float blendFactor[4] = { 0, 0, 0, 0 };
 	m_pContext->OMSetBlendState(pBS, blendFactor, 0xffffffff);
 }
@@ -526,7 +524,7 @@ void Engine::CRenderer_Manager::ZSort()
 		if (!spRenderer1)return false;
 		if (!spRenderer2)return true;
 		return spRenderer1->GetPriority() < spRenderer2->GetPriority();
-		} };
+		} }; 
 	//m_listRenderer[ENUM_TO_UINT(RENDERGROUP::PARTICLE)].sort(function);
 	m_listRenderer[ENUM_TO_UINT(RENDERGROUP::UNLIT)].sort(function);
 	m_listRenderer[ENUM_TO_UINT(RENDERGROUP::BLEND)].sort(function);
@@ -853,14 +851,14 @@ void Engine::CRenderer_Manager::RenderOutLine()
 {
 	if (FAILED(m_pGameInstance->Begin_RT(TEXT("TargetOutline")))) return;
 	if (FAILED(m_pGameInstance->Bind_RT_SRV(L"TargetDepth", m_pSSShader, "g_DepthTexture")))return;
-	if (FAILED(m_pGameInstance->Bind_RT_SRV(TEXT("TargetNormal"), m_pSSShader, "g_NormalTexture"))) return;
-	if (FAILED(m_pGameInstance->Bind_RT_SRV(TEXT("TargetELSR"), m_pSSShader, "g_ELSRTexture"))) return;
+	if (FAILED(m_pGameInstance->Bind_RT_SRV(TEXT("TargetNormal"),       m_pSSShader, "g_NormalTexture"))) return;
+	if (FAILED(m_pGameInstance->Bind_RT_SRV(TEXT("TargetELSR"),       m_pSSShader, "g_ELSRTexture"))) return;
 	auto _OLDesc = m_tDesc.OLDesc;
 
 	if (!m_bUseNormalOL)
-		_OLDesc.vNormalEdgeProperty.x = 0.f;
+		_OLDesc.vNormalEdgeProperty.x	= 0.f;
 	if (!m_bUseDepthOL)
-		_OLDesc.vDepthEdgeProperty.x = 0.f;
+		_OLDesc.vDepthEdgeProperty.x	= 0.f;
 
 	if (FAILED(m_pGameInstance->Bind_TransformInverseStateMatrix(m_pSSShader, "g_ProjMatrixInv", D3DTS::PROJ))) return;
 
@@ -909,7 +907,7 @@ void Engine::CRenderer_Manager::RenderBloom(const wstring& sCurPPScene)
 	_float2 vTexelSize;
 	vTexelSize.x = 1.f / m_Viewports[0].Width;
 	vTexelSize.y = 1.f / m_Viewports[0].Height;
-
+	
 	//ExtractBloom
 	if (FAILED(m_pGameInstance->Begin_RT(L"Target_PP0"))) return;
 	if (FAILED(m_pGameInstance->Bind_RT_SRV(L"TargetDepth", m_pPPShader, "g_DepthTexture")))return;
@@ -920,133 +918,133 @@ void Engine::CRenderer_Manager::RenderBloom(const wstring& sCurPPScene)
 
 	if (FAILED(m_pPPShader->Bind_RawData("g_fBloomThreshold", &m_tDesc.BloomDesc.fEmissiveThreshold, sizeof(Engine::_float))))return;
 	if (FAILED(m_pPPShader->Bind_RawData("g_fBlurDepthLimit", &m_tDesc.BloomDesc.fBlurDepthLimit, sizeof(Engine::_float))))return;
-
+	
 	if (FAILED(m_pPPShader->Begin(ENUM_TO_UINT(POSTPROCESSING::BLOOMEXTRACT)))) return;
 	if (FAILED(m_pVIBuffer->Bind_Resources()))                                  return;
 	if (FAILED(m_pVIBuffer->Render()))                                          return;
-
+	
 	if (FAILED(m_pGameInstance->End_MRT())) return;
-
+	
 	int idx = 0;
 	//DownSample0
 	for (auto [_RTTag, TextureRTTag] : {
-		pair(L"Target_PP_DS0A", L"Target_PP0"),
-		pair(L"Target_PP_DS1A", L"Target_PP_DS0A") ,
-		pair(L"Target_PP_DS2A", L"Target_PP_DS1A") ,
-		pair(L"Target_PP_DS3A", L"Target_PP_DS2A") })
+	    pair(L"Target_PP_DS0A", L"Target_PP0"),
+	    pair(L"Target_PP_DS1A", L"Target_PP_DS0A") , 
+	    pair(L"Target_PP_DS2A", L"Target_PP_DS1A") , 
+	    pair(L"Target_PP_DS3A", L"Target_PP_DS2A")})
 	{
-		idx++;
-		m_pContext->RSSetViewports(1, &m_Viewports[idx]);
-
-		m_pContext->PSSetShaderResources(0, 16, nullSRV);
-		if (FAILED(m_pGameInstance->Begin_RT(_RTTag, false))) return;
-		if (FAILED(m_pGameInstance->Bind_RT_SRV(TextureRTTag, m_pPPShader, "g_TargetSampleTexture")))  return;
-		m_pPPShader->Bind_RawData("g_vTexelSize", &vTexelSize, sizeof(_float2));
-
-
-		if (FAILED(m_pPPShader->Bind_Matrix("g_WorldMatrix", &m_matDSWorlds[idx])))		return;
-		if (FAILED(m_pPPShader->Bind_Matrix("g_ViewMatrix", &m_matView)))				return;
-		if (FAILED(m_pPPShader->Bind_Matrix("g_ProjMatrix", &m_matDSProjections[idx]))) return;
-
-		if (FAILED(m_pPPShader->Begin(ENUM_TO_UINT(POSTPROCESSING::DOWNSAMPLE))))   return;
-		if (FAILED(m_pVIBuffer->Bind_Resources()))                                  return;
-		if (FAILED(m_pVIBuffer->Render()))                                          return;
-
-		if (FAILED(m_pGameInstance->End_MRT()))  return;
-		vTexelSize.x *= 2.f;
-		vTexelSize.y *= 2.f;
+	    idx++;
+	    m_pContext->RSSetViewports(1, &m_Viewports[idx]);
+	
+	    m_pContext->PSSetShaderResources(0, 16, nullSRV);
+	    if (FAILED(m_pGameInstance->Begin_RT(_RTTag, false))) return;
+	    if (FAILED(m_pGameInstance->Bind_RT_SRV(TextureRTTag, m_pPPShader, "g_TargetSampleTexture")))  return;
+	    m_pPPShader->Bind_RawData("g_vTexelSize", &vTexelSize, sizeof(_float2));
+	
+	
+	    if (FAILED(m_pPPShader->Bind_Matrix("g_WorldMatrix",    &m_matDSWorlds[idx])))		return;
+	    if (FAILED(m_pPPShader->Bind_Matrix("g_ViewMatrix",     &m_matView)))				return;
+	    if (FAILED(m_pPPShader->Bind_Matrix("g_ProjMatrix",     &m_matDSProjections[idx]))) return;
+	
+	    if (FAILED(m_pPPShader->Begin(ENUM_TO_UINT(POSTPROCESSING::DOWNSAMPLE))))   return;
+	    if (FAILED(m_pVIBuffer->Bind_Resources()))                                  return;
+	    if (FAILED(m_pVIBuffer->Render()))                                          return;
+	
+	    if (FAILED(m_pGameInstance->End_MRT()))  return;
+	    vTexelSize.x *= 2.f;
+	    vTexelSize.y *= 2.f;
 	}
 	m_pContext->RSSetViewports(1, &m_Viewports[0]);
 	m_pContext->PSSetShaderResources(0, 16, nullSRV);
-
+	
 	//Blur
 	vTexelSize.x = 1.f / m_Viewports[0].Width;
 	vTexelSize.y = 1.f / m_Viewports[0].Height;
 	idx = 0;
 	for (auto [_RTTag0, _RTTag1] : {
-		pair(L"Target_PP_DS0A", L"Target_PP_DS0B"),
-		pair(L"Target_PP_DS1A", L"Target_PP_DS1B") ,
-		pair(L"Target_PP_DS2A", L"Target_PP_DS2B") ,
-		pair(L"Target_PP_DS3A", L"Target_PP_DS3B") })
+	    pair(L"Target_PP_DS0A", L"Target_PP_DS0B"),
+	    pair(L"Target_PP_DS1A", L"Target_PP_DS1B") ,
+	    pair(L"Target_PP_DS2A", L"Target_PP_DS2B") ,
+	    pair(L"Target_PP_DS3A", L"Target_PP_DS3B")})
 	{
-		idx++;
-		m_pContext->RSSetViewports(1, &m_Viewports[idx]);
-
-		vTexelSize.x *= 2.f;
-		vTexelSize.y *= 2.f;
-
-		m_pContext->PSSetShaderResources(0, 16, nullSRV);
-		if (FAILED(m_pGameInstance->Begin_RT(_RTTag1, false))) return;
-		if (FAILED(m_pGameInstance->Bind_RT_SRV(_RTTag0, m_pPPShader, "g_TargetSampleTexture")))  return;
-		m_pPPShader->Bind_RawData("g_vTexelSize", &vTexelSize, sizeof(_float2));
-
-		if (FAILED(m_pPPShader->Bind_Matrix("g_WorldMatrix", &m_matDSWorlds[idx])))		return;
-		if (FAILED(m_pPPShader->Bind_Matrix("g_ViewMatrix", &m_matView)))				return;
-		if (FAILED(m_pPPShader->Bind_Matrix("g_ProjMatrix", &m_matDSProjections[idx]))) return;
-
-		if (FAILED(m_pPPShader->Begin(ENUM_TO_UINT(POSTPROCESSING::BLURH))))    return;
-		if (FAILED(m_pVIBuffer->Bind_Resources()))                              return;
-		if (FAILED(m_pVIBuffer->Render()))                                      return;
-
-		if (FAILED(m_pGameInstance->End_MRT()))  return;
-		m_pContext->PSSetShaderResources(0, 16, nullSRV);
-		/////////
-		if (FAILED(m_pGameInstance->Begin_RT(_RTTag0, false)))  return;
-		if (FAILED(m_pGameInstance->Bind_RT_SRV(_RTTag1, m_pPPShader, "g_TargetSampleTexture")))  return;
-		m_pPPShader->Bind_RawData("g_vTexelSize", &vTexelSize, sizeof(_float2));
-
-		if (FAILED(m_pPPShader->Bind_Matrix("g_WorldMatrix", &m_matDSWorlds[idx])))		return;
-		if (FAILED(m_pPPShader->Bind_Matrix("g_ViewMatrix", &m_matView)))				return;
-		if (FAILED(m_pPPShader->Bind_Matrix("g_ProjMatrix", &m_matDSProjections[idx]))) return;
-
-		if (FAILED(m_pPPShader->Begin(ENUM_TO_UINT(POSTPROCESSING::BLURV))))    return;
-		if (FAILED(m_pVIBuffer->Bind_Resources()))                              return;
-		if (FAILED(m_pVIBuffer->Render()))                                      return;
-
-		if (FAILED(m_pGameInstance->End_MRT()))  return;
+	    idx++;
+	    m_pContext->RSSetViewports(1, &m_Viewports[idx]);
+	
+	    vTexelSize.x *= 2.f;
+	    vTexelSize.y *= 2.f;
+	
+	    m_pContext->PSSetShaderResources(0, 16, nullSRV);
+	    if (FAILED(m_pGameInstance->Begin_RT(_RTTag1, false))) return;
+	    if (FAILED(m_pGameInstance->Bind_RT_SRV(_RTTag0, m_pPPShader, "g_TargetSampleTexture")))  return;
+	    m_pPPShader->Bind_RawData("g_vTexelSize", &vTexelSize, sizeof(_float2));
+	        
+	    if (FAILED(m_pPPShader->Bind_Matrix("g_WorldMatrix",    &m_matDSWorlds[idx])))		return;
+	    if (FAILED(m_pPPShader->Bind_Matrix("g_ViewMatrix",     &m_matView)))				return;
+	    if (FAILED(m_pPPShader->Bind_Matrix("g_ProjMatrix",     &m_matDSProjections[idx]))) return;
+	
+	    if (FAILED(m_pPPShader->Begin(ENUM_TO_UINT(POSTPROCESSING::BLURH))))    return;
+	    if (FAILED(m_pVIBuffer->Bind_Resources()))                              return;
+	    if (FAILED(m_pVIBuffer->Render()))                                      return;
+	
+	    if (FAILED(m_pGameInstance->End_MRT()))  return;
+	    m_pContext->PSSetShaderResources(0, 16, nullSRV);
+	    /////////
+	    if (FAILED(m_pGameInstance->Begin_RT(_RTTag0, false)))  return;
+	    if (FAILED(m_pGameInstance->Bind_RT_SRV(_RTTag1, m_pPPShader, "g_TargetSampleTexture")))  return;
+	    m_pPPShader->Bind_RawData("g_vTexelSize", &vTexelSize, sizeof(_float2));
+	        
+	    if (FAILED(m_pPPShader->Bind_Matrix("g_WorldMatrix",    &m_matDSWorlds[idx])))		return;
+	    if (FAILED(m_pPPShader->Bind_Matrix("g_ViewMatrix",     &m_matView)))				return;
+	    if (FAILED(m_pPPShader->Bind_Matrix("g_ProjMatrix",     &m_matDSProjections[idx]))) return;
+	
+	    if (FAILED(m_pPPShader->Begin(ENUM_TO_UINT(POSTPROCESSING::BLURV))))    return;
+	    if (FAILED(m_pVIBuffer->Bind_Resources()))                              return;
+	    if (FAILED(m_pVIBuffer->Render()))                                      return;
+	
+	    if (FAILED(m_pGameInstance->End_MRT()))  return;
 	}
 	m_pContext->RSSetViewports(1, &m_Viewports[0]);
-
+	
 	//UpSample
 	m_pContext->PSSetShaderResources(0, 16, nullSRV);
 	if (FAILED(m_pGameInstance->Begin_RT(L"Target_Bloom", false)))  return;
-
+	
 	if (FAILED(m_pGameInstance->Bind_RT_SRV(L"Target_PP_DS0A", m_pPPShader, "g_UpSampleTexture0")))  return;
 	if (FAILED(m_pGameInstance->Bind_RT_SRV(L"Target_PP_DS1A", m_pPPShader, "g_UpSampleTexture1")))  return;
 	if (FAILED(m_pGameInstance->Bind_RT_SRV(L"Target_PP_DS2A", m_pPPShader, "g_UpSampleTexture2")))  return;
 	if (FAILED(m_pGameInstance->Bind_RT_SRV(L"Target_PP_DS3A", m_pPPShader, "g_UpSampleTexture3")))  return;
-
-	if (FAILED(m_pPPShader->Bind_Matrix("g_WorldMatrix", &m_matWorld)))   return;
-	if (FAILED(m_pPPShader->Bind_Matrix("g_ViewMatrix", &m_matView)))     return;
-	if (FAILED(m_pPPShader->Bind_Matrix("g_ProjMatrix", &m_matProjection)))     return;
-
+	
+	if (FAILED(m_pPPShader->Bind_Matrix("g_WorldMatrix",	&m_matWorld)))   return;
+	if (FAILED(m_pPPShader->Bind_Matrix("g_ViewMatrix",		&m_matView)))     return;
+	if (FAILED(m_pPPShader->Bind_Matrix("g_ProjMatrix",		&m_matProjection)))     return;
+	
 	if (FAILED(m_pPPShader->Begin(ENUM_TO_UINT(POSTPROCESSING::UPSAMPLE))))     return;
 	if (FAILED(m_pVIBuffer->Bind_Resources()))                                  return;
 	if (FAILED(m_pVIBuffer->Render()))                                          return;
-
+	
 	if (FAILED(m_pGameInstance->End_MRT()))  return;
 }
 
 void CRenderer_Manager::RenderPPCombine(const wstring& sCurPPScene)
 {
-	ID3D11ShaderResourceView* nullSRV[16] = {};
+	ID3D11ShaderResourceView * nullSRV[16] = {};
 	m_pContext->PSSetShaderResources(0, 16, nullSRV);
 	if (FAILED(m_pGameInstance->Begin_RT(sCurPPScene, true, false)))return;
-	if (FAILED(m_pGameInstance->Bind_RT_SRV(TEXT("Target_Bloom"), m_pPPShader, "g_BloomTexture"))) return;
+	if (FAILED(m_pGameInstance->Bind_RT_SRV(TEXT("Target_Bloom"),m_pPPShader, "g_BloomTexture"))) return;
 	if (FAILED(m_pGameInstance->Bind_RT_SRV(L"TargetDiffuseB", m_pPPShader, "g_BTexture")))return;
 	if (FAILED(m_pGameInstance->Bind_RT_SRV(L"TargetEffectB", m_pPPShader, "g_EBTexture")))return;
 	if (FAILED(m_pGameInstance->Bind_RT_SRV(L"TargetNormal", m_pPPShader, "g_NormalTexture")))return;
 	if (FAILED(m_pGameInstance->Bind_RT_SRV(L"TargetDepth", m_pPPShader, "g_DepthTexture")))return;
 	if (FAILED(m_pGameInstance->Bind_RT_SRV(L"TargetEmissive", m_pPPShader, "g_EmissiveTexture")))return;
 
-	if (FAILED(m_pPPShader->Bind_Matrix("g_WorldMatrix", &m_matWorld))) return;
-	if (FAILED(m_pPPShader->Bind_Matrix("g_ViewMatrix", &m_matView))) return;
-	if (FAILED(m_pPPShader->Bind_Matrix("g_ProjMatrix", &m_matProjection))) return;
+	if (FAILED(m_pPPShader->Bind_Matrix("g_WorldMatrix",	&m_matWorld))) return;
+	if (FAILED(m_pPPShader->Bind_Matrix("g_ViewMatrix",		&m_matView))) return;
+	if (FAILED(m_pPPShader->Bind_Matrix("g_ProjMatrix",		&m_matProjection))) return;
 	if (FAILED(m_pGameInstance->Bind_TransformInverseStateMatrix(m_pPPShader, "g_ViewMatrixInv", D3DTS::VIEW)))return;
 	if (FAILED(m_pGameInstance->Bind_TransformInverseStateMatrix(m_pPPShader, "g_ProjMatrixInv", D3DTS::PROJ)))return;
-
+	
 	Engine::_uint uiEnv = { ENUM_TO_UINT(m_tDesc.eEnvironment) };
-	if (FAILED(m_pPPShader->Bind_RawData("g_uiEnvironment", &uiEnv, sizeof(Engine::_uint))))return;
+ 	if (FAILED(m_pPPShader->Bind_RawData("g_uiEnvironment", &uiEnv, sizeof(Engine::_uint))))return;
 	if (m_tDesc.eEnvironment == ENVIRONMENT::OUTDOOR)
 	{
 		if (FAILED(m_pPPShader->Bind_RawData("g_fDensityOfDots", &m_tDesc.fDensityOfDotsOutDoor, sizeof(Engine::_float))))return;
@@ -1120,18 +1118,18 @@ void CRenderer_Manager::RenderPPCombine(const wstring& sCurPPScene)
 void CRenderer_Manager::RenderCopy(const wstring& sSourceRTTag, const wstring& sTargetRTTag)
 {
 	if (FAILED(m_pGameInstance->Begin_RT(sTargetRTTag))) return;
-	if (FAILED(m_pGameInstance->Bind_RT_SRV(sSourceRTTag, m_pPPShader, "g_SceneTexture"))) return;
+    if (FAILED(m_pGameInstance->Bind_RT_SRV(sSourceRTTag, m_pPPShader, "g_SceneTexture"))) return;
 
-	if (FAILED(m_pPPShader->Bind_Matrix("g_WorldMatrix", &m_matWorld)))  return;
-	if (FAILED(m_pPPShader->Bind_Matrix("g_ViewMatrix", &m_matView)))    return;
-	if (FAILED(m_pPPShader->Bind_Matrix("g_ProjMatrix", &m_matProjection)))    return;
+    if (FAILED(m_pPPShader->Bind_Matrix("g_WorldMatrix", &m_matWorld)))  return;
+    if (FAILED(m_pPPShader->Bind_Matrix("g_ViewMatrix", &m_matView)))    return;
+    if (FAILED(m_pPPShader->Bind_Matrix("g_ProjMatrix", &m_matProjection)))    return;
 
-	if (FAILED(m_pPPShader->Begin(ENUM_TO_UINT(POSTPROCESSING::COPY))))     return;
-	if (FAILED(m_pVIBuffer->Bind_Resources()))                              return;
-	if (FAILED(m_pVIBuffer->Render()))                                      return;
+    if (FAILED(m_pPPShader->Begin(ENUM_TO_UINT(POSTPROCESSING::COPY))))     return;
+    if (FAILED(m_pVIBuffer->Bind_Resources()))                              return;
+    if (FAILED(m_pVIBuffer->Render()))                                      return;
 
-	if (FAILED(m_pGameInstance->End_MRT()))                                 return;
-	return;
+    if (FAILED(m_pGameInstance->End_MRT()))                                 return;
+    return;
 }
 void CRenderer_Manager::RenderAdditionalBlur()
 {
@@ -1210,7 +1208,7 @@ void Engine::CRenderer_Manager::Render(Engine::RENDERGROUP eGroupID)
 void Engine::CRenderer_Manager::RenderSS(Engine::SCREENSPACE eGroupID)
 {
 	for (auto it = m_listSSRenderer[ENUM_TO_UINT(eGroupID)].begin(); it != m_listSSRenderer[ENUM_TO_UINT(eGroupID)].end();)
-	{
+	{                                   
 		auto spRenderer = it->lock();
 		if (spRenderer)
 		{
@@ -1227,32 +1225,14 @@ void Engine::CRenderer_Manager::RenderDebug()
 	DirectX::XMStoreFloat4x4(&f44, mat);
 	if (FAILED(m_pShader->Bind_Matrix("g_matWVP", &f44)))
 		return;
-	static Engine::_bool bRenderMRT{ false };
-	static Engine::_bool bRenderRT{ false };
-	static Engine::_bool bLastIsRT{ false };
+	static Engine::_bool bRenderOBJ{ false };
 	if (FAILED(m_pShader->Bind_Matrix("g_ViewMatrix", &m_matView))) return;
 	if (FAILED(m_pShader->Bind_Matrix("g_ProjMatrix", &m_matProjection))) return;
-	//if (m_pGameInstance->IsKeyState(DIK_1, EKEYACTIONSTATE::ENTER)) { bRenderMRT ^= true; bLastIsRT = { false }; }
-	if (m_pGameInstance->IsKeyState(DIK_3, EKEYACTIONSTATE::ENTER)) { bRenderRT ^= true; bLastIsRT = { true }; }
-	if (bRenderMRT)
-		m_fDebugU = { 0.f };
-	else if (bRenderRT) {
-		m_fDebugU -= 0.01f;
-		if (m_fDebugU < 0.f)
-			m_fDebugU = { 0.f };
+	if (m_pGameInstance->IsKeyState(DIK_1, EKEYACTIONSTATE::ENTER))bRenderOBJ ^= true;
+	if (bRenderOBJ) {
+		if (FAILED(m_pGameInstance->Render_RT(L"TargetV", m_pShader, m_pVIBuffer)))
+			return;
 	}
-	else {
-		m_fDebugU += 0.01f;
-		if (m_fDebugU > 1.f)
-			m_fDebugU = { 1.f };
-	}
-	if (FAILED(m_pShader->Bind_RawData("g_fDebugU", &m_fDebugU, sizeof(Engine::_float))))return;
-	//if (!bLastIsRT)
-	//{
-	//	if (FAILED(m_pGameInstance->Render_MRT(L"MRT_WHOLE", m_pShader, m_pVIBuffer)))return;
-	//}
-	//else 
-	if (FAILED(m_pGameInstance->Render_RT(L"TargetV", m_pShader, m_pVIBuffer)))return;
 }
 Engine::_float CRenderer_Manager::MakeDistortionUV(Engine::_float2& f2UVPos, Engine::_float2& f2UVRange)
 {
@@ -1348,59 +1328,9 @@ Engine::_float CRenderer_Manager::DiffuseApproach(Engine::_float fCurrent, Engin
 		return fTarget;
 	return fCurrent + (fDiff < 0.f ? -fStep : fStep);
 }
-HRESULT CRenderer_Manager::ReadyWholeRT()
-{
-	CHKFAIL(m_pGameInstance->Add_MRT(L"MRT_WHOLE", L"TargetDiffuseB"));
-	CHKFAIL(m_pGameInstance->Add_MRT(L"MRT_WHOLE", L"TargetNormal"));
-	CHKFAIL(m_pGameInstance->Add_MRT(L"MRT_WHOLE", L"TargetEmissive"));
-	CHKFAIL(m_pGameInstance->Add_MRT(L"MRT_WHOLE", L"TargetELSR"));
-	CHKFAIL(m_pGameInstance->Add_MRT(L"MRT_WHOLE", L"TargetV"));
-	CHKFAIL(m_pGameInstance->Add_MRT(L"MRT_WHOLE", L"TargetGlass"));
-	CHKFAIL(m_pGameInstance->Add_MRT(L"MRT_WHOLE", L"TargetOutline"));
-	CHKFAIL(m_pGameInstance->Add_MRT(L"MRT_WHOLE", L"TargetDepth"));
-	CHKFAIL(m_pGameInstance->Add_MRT(L"MRT_WHOLE", L"TargetSShadow"));
-	CHKFAIL(m_pGameInstance->Add_MRT(L"MRT_WHOLE", L"TargetDShadow"));
-	CHKFAIL(m_pGameInstance->Add_MRT(L"MRT_WHOLE", L"TargetLight"));
-	CHKFAIL(m_pGameInstance->Add_MRT(L"MRT_WHOLE", L"TargetPriority"));
-	CHKFAIL(m_pGameInstance->Add_MRT(L"MRT_WHOLE", L"TargetSSR"));
-	CHKFAIL(m_pGameInstance->Add_MRT(L"MRT_WHOLE", L"TargetAfter"));
-	CHKFAIL(m_pGameInstance->Add_MRT(L"MRT_WHOLE", L"Target_PP_DS0A"));
-	CHKFAIL(m_pGameInstance->Add_MRT(L"MRT_WHOLE", L"Target_PP_DS1A"));
-	CHKFAIL(m_pGameInstance->Add_MRT(L"MRT_WHOLE", L"Target_PP_DS2A"));
-	CHKFAIL(m_pGameInstance->Add_MRT(L"MRT_WHOLE", L"Target_PP_DS3A"));
-	CHKFAIL(m_pGameInstance->Add_MRT(L"MRT_WHOLE", L"Target_Bloom"));
-	// GBuffer
-	CHKFAIL(m_pGameInstance->Ready_RT_Debug(L"TargetDiffuseB", 155.f, 115.f, 192.f, 108.f));
-	CHKFAIL(m_pGameInstance->Ready_RT_Debug(L"TargetNormal", 155.f, 285.f, 192.f, 108.f));
-	CHKFAIL(m_pGameInstance->Ready_RT_Debug(L"TargetEmissive", 155.f, 455.f, 192.f, 108.f));
-	CHKFAIL(m_pGameInstance->Ready_RT_Debug(L"TargetELSR", 155.f, 625.f, 192.f, 108.f));
-	CHKFAIL(m_pGameInstance->Ready_RT_Debug(L"TargetV", 155.f, 795.f, 192.f, 108.f));
-	CHKFAIL(m_pGameInstance->Ready_RT_Debug(L"TargetGlass", 155.f, 965.f, 192.f, 108.f));
-	// OutLine
-	CHKFAIL(m_pGameInstance->Ready_RT_Debug(L"TargetOutline", 385.f, 115.f, 192.f, 108.f));
-	// DepthBuffer
-	CHKFAIL(m_pGameInstance->Ready_RT_Debug(L"TargetDepth", 615.f, 115.f, 192.f, 108.f));
-	CHKFAIL(m_pGameInstance->Ready_RT_Debug(L"TargetSShadow", 615.f, 285.f, 192.f, 108.f));
-	CHKFAIL(m_pGameInstance->Ready_RT_Debug(L"TargetDShadow", 615.f, 455.f, 192.f, 108.f));
-	// Light
-	CHKFAIL(m_pGameInstance->Ready_RT_Debug(L"TargetLight", 845.f, 115.f, 192.f, 108.f));
-	// Sky Sphere
-	CHKFAIL(m_pGameInstance->Ready_RT_Debug(L"TargetPriority", 1075.f, 115.f, 192.f, 108.f));
-	// Screen Space
-	CHKFAIL(m_pGameInstance->Ready_RT_Debug(L"TargetSSR", 1305.f, 115.f, 192.f, 108.f));
-	CHKFAIL(m_pGameInstance->Ready_RT_Debug(L"TargetAfter", 1305.f, 285.f, 192.f, 108.f));
-	// Scaling
-	CHKFAIL(m_pGameInstance->Ready_RT_Debug(L"Target_PP_DS0A", 1535.f, 115.f, 192.f, 108.f));
-	CHKFAIL(m_pGameInstance->Ready_RT_Debug(L"Target_PP_DS1A", 1535.f, 285.f, 192.f, 108.f));
-	CHKFAIL(m_pGameInstance->Ready_RT_Debug(L"Target_PP_DS2A", 1535.f, 455.f, 192.f, 108.f));
-	CHKFAIL(m_pGameInstance->Ready_RT_Debug(L"Target_PP_DS3A", 1535.f, 625.f, 192.f, 108.f));
-	// Bloom
-	CHKFAIL(m_pGameInstance->Ready_RT_Debug(L"Target_Bloom", 1765.f, 115.f, 192.f, 108.f));
-	return S_OK;
-}
 Engine::CRenderer_Manager* Engine::CRenderer_Manager::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
-	auto pInstance = new CRenderer_Manager(pDevice, pContext);
+	auto pInstance = new CRenderer_Manager(pDevice,pContext);
 	if (FAILED(pInstance->Initialize()))
 	{
 		MSG_BOX("Failed to Create : Renderer_Manager");
@@ -1439,11 +1369,11 @@ void CRenderer_Manager::SetUP()
 		m_iState %= 6;
 	}
 
-	CMesh::SETFORCEIGNORE(L"NC", m_iState < 1);
-	CMesh::SETFORCEIGNORE(L"EL", m_iState < 2);
-	CMeshRenderer::SETOLIGNORE(m_iState >= 3);
-	m_bUseNormalOL = (m_iState >= 4);
-	m_bUseDepthOL = (m_iState >= 5);
+	CMesh::SETFORCEIGNORE(L"EL", m_iState < 1);
+	CMeshRenderer::SETOLIGNORE(m_iState >= 2);
+	m_bUseNormalOL	= (m_iState >= 3);
+	m_bUseDepthOL	= (m_iState >= 4);
+	CMesh::SETFORCEIGNORE(L"NC", m_iState < 5);
 }
 
 

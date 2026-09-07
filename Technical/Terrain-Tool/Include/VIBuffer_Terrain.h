@@ -3,14 +3,6 @@
 #include "VIBuffer.h"
 #include "Asset.h"
 
-// 동적 해상도 조절
-// 이미지 변경
-// 지형 조작
-
-// heightMap
-// splatMap
-// 콜리션 
-
 NS_BEGIN(Engine)
 
 class ENGINE_DLL CVIBuffer_Terrain final : public CVIBuffer
@@ -81,6 +73,7 @@ public:
 
 	void	GetTileNames();
 	_float4 GetSplatScale();
+	_float GetTrasitionScale() { return m_desc.m_fHeightScale; };
 	ID3D11ShaderResourceView* GetSplatMap();
 
 	void	GetNavNames();

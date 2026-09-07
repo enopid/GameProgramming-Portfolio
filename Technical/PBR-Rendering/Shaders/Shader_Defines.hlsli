@@ -3,6 +3,8 @@
 
 
 #define PI 3.1415926535
+#define WINSIZEX 1920
+#define WINSIZEY 1080
 
 
 sampler DefaultSampler = sampler_state

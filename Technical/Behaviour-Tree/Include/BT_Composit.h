@@ -15,6 +15,11 @@ public:
 protected:
 	vector<unique_ptr<CBT_Node>>	m_vecChildNodes;
 	_int       m_iCurrentChildIdx = 0;
+
+	// CBT_Node을(를) 통해 상속됨
+	virtual void SetGVNodePos() override;
+	RECT DrawNode(Agraph_t* pGraph) override;
+	vector<ed::LinkId> m_vecLinkIds;
 };
 
 NS_END

@@ -765,17 +765,17 @@ void CCutScene::Play()
 	if (wstring(m_desc.sVOXName) != L"None")
 		m_pGameInstance->Play_VOX(m_desc.sVOXName);
 	SetAct();
-	m_iCurSubtitleIdx	= 0;
-	m_iCurIllustIdx		= 0;
-	m_iCurTransitionIdx	= 0;
+	m_iCurSubtitleIdx	= 1000;
+	m_iCurIllustIdx		= 1000;
+	m_iCurTransitionIdx = 0;
 	m_iCurSpotlightIdx	= 0;
 	m_iCurVFXIdx		= 0;
 	m_iCurVOXIdx		= 0;
-	m_iCurTalkIdx		= 0;
-	m_iCurRGIdx			= 0;
-	m_iCurAttachIdx		= 0;
+	m_iCurTalkIdx		= 1000;
+	m_iCurRGIdx			= 1000;
 	m_iCSFuncIdx		= 0;
-	m_iSLDescIdx		= 0;
+	m_iSLDescIdx		= 1000;
+	m_iCurAttachIdx		= 0;
 	m_pCameraHandler->SetHandle(true);
 	m_pGameInstance->SetBPM(120);
 	for (auto _pActor : m_vecActors) {
@@ -805,16 +805,16 @@ void CCutScene::Play(int _iActIdx)
 	m_bSpecificSeq = true;
 	m_iActIdx = _iActIdx;
 	SetAct();
-	m_iCurSubtitleIdx	= 0;
-	m_iCurIllustIdx		= 0;
+	m_iCurSubtitleIdx	= 1000;
+	m_iCurIllustIdx		= 1000;
 	m_iCurTransitionIdx = 0;
 	m_iCurSpotlightIdx	= 0;
 	m_iCurVFXIdx		= 0;
 	m_iCurVOXIdx		= 0;
-	m_iCurTalkIdx		= 0;
-	m_iCurRGIdx			= 0;
+	m_iCurTalkIdx		= 1000;
+	m_iCurRGIdx			= 1000;
 	m_iCSFuncIdx		= 0;
-	m_iSLDescIdx		= 0;
+	m_iSLDescIdx		= 1000;
 	m_iCurAttachIdx		= 0;
 	m_pCameraHandler->SetHandle(true);
 	m_pGameInstance->SetBPM(120);

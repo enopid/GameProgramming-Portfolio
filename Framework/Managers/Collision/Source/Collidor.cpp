@@ -132,6 +132,11 @@ HRESULT CCollidor::SetCustomSetting(_uint idx)
 void CCollidor::Update(float fDeltaTime)
 {
     __super::Update(fDeltaTime);
+}
+
+void CCollidor::Late_Update(float fDeltaTime)
+{
+    __super::Late_Update(fDeltaTime);
     auto _worldMatrix = m_pOwnerObj->Get_MainTransform().lock()->GetWorldMatrix();
     for (size_t i = 0; i < 3; i++)
     {
@@ -152,7 +157,17 @@ void CCollidor::Update(float fDeltaTime)
             if (in(m_desc.m_iCollidorIdx, { 16,17 }))       m_pBounding[i]->SetColor(Colors::LightCyan);
             if (in(m_desc.m_iCollidorIdx, { 18 }))          m_pBounding[i]->SetColor(Colors::Red);
 
-            if (IsActive() || m_pGameInstance->GetCurrentLevelTag()==L"Level_Editor") m_pBounding[i]->AddDebugRenderCall(1 << (i + 1));
+            if (IsActive() || m_pGameInstance->GetCurrentLevelTag() == L"Level_Editor") {
+                //m_pBounding[i]->AddDebugRenderCall(1 << (i + 1));
+                if (in(m_desc.m_iCollidorIdx, { 16, 17 }))
+                    m_pBounding[i]->AddDebugRenderCall(1 << (6));
+                if (in(m_desc.m_iCollidorIdx, { 1,2,3,4,18 }))
+                    m_pBounding[i]->AddDebugRenderCall(1 << (7));
+                if (in(m_desc.m_iCollidorIdx, { 5,6,7 }))
+                    m_pBounding[i]->AddDebugRenderCall(1 << (8));
+                if (in(m_desc.m_iCollidorIdx, { 8,9,10 }))
+                    m_pBounding[i]->AddDebugRenderCall(1 << (9));
+            }
         }
     }
 }
@@ -283,42 +298,59 @@ void CCollidor::TestSolver()
     if (!in(m_desc.m_iCollidorIdx, {1,2,3, 4, 18})) return;
     _vector _vDist = XMVectorSet(0.f, 0.f, 0.f, 1.f);
     _vector _vCommonDist = XMVectorSet(0.f, 0.f, 0.f, 1.f);
-    int iCommonCount(0);
+
     for (auto& [_pCollidor, _desc] : m_mapCurManifolds) {
-        _int _iColIdx       =  m_desc.m_iCollidorIdx;
+        _int _iColIdx = m_desc.m_iCollidorIdx;
         _int _iTargetColIdx = _pCollidor->GetDesc()->m_iCollidorIdx;
-        if (!(in(_iColIdx, { 1,2,3, 4, 18 }) && in(_iTargetColIdx, { 1,2,3, 4, 18 }))) continue;
-        
-        _float fRatio = 1.f;
-        if (_iColIdx == _iTargetColIdx) {
-            fRatio = 0.5f;
-            if (_iColIdx == 4) fRatio = 0.f;
-        }
-        else if (_iColIdx == 1  &&  in(_iTargetColIdx, {-1}))       fRatio = 0.f;
-        else if (_iColIdx == 2  &&  in(_iTargetColIdx, {1}))        fRatio = 0.f;
-        else if (_iColIdx == 3  &&  in(_iTargetColIdx, {1,2}))      fRatio = 0.f;
-        else if (_iColIdx == 4  &&  in(_iTargetColIdx, {1,2,3, 18}))    fRatio = 0.f;
-        
-        if (_iColIdx == 18) {
-            if (_iTargetColIdx == 4)
-                fRatio = 1.f;
-            else
-                fRatio = 0.f;
+        _float fRatio       = 0.5f;
+        {
+            fRatio = 1.0f;
+
+            if (!(in(_iColIdx, { 1,2,3, 4, 18 }) && in(_iTargetColIdx, { 1,2,3, 4, 18 }))) continue;
+
+            if (_iColIdx == _iTargetColIdx) {
+                fRatio = 0.5f;
+                if (_iColIdx == 4) fRatio = 0.f;
+            }
+            else if (_iColIdx == 1 && in(_iTargetColIdx, { -1 }))       fRatio = 0.f;
+            else if (_iColIdx == 2 && in(_iTargetColIdx, { 1 }))        fRatio = 0.f;
+            else if (_iColIdx == 3 && in(_iTargetColIdx, { 1,2 }))      fRatio = 0.f;
+            else if (_iColIdx == 4 && in(_iTargetColIdx, { 1,2,3, 18 }))    fRatio = 0.f;
+
+            if (_iColIdx == 18) {
+                if (_iTargetColIdx == 4)
+                    fRatio = 1.f;
+                else
+                    fRatio = 0.f;
+            }
+
         }
 
         for (int i = 0; i < _desc.contactCount; i++)
         {
-            if (_iTargetColIdx!=4)
-                _vDist -= XMVector3Normalize(XMVectorSetY(XMLoadFloat4(&_desc.contacts[i].vNormal), 0.f)) * _desc.contacts[i].fPenetration * fRatio;
-            else {
+            if (_iTargetColIdx!=4) //캐릭터간 충돌의 경우 공중에 뜨지않도록 y성분 제거
+                _vDist       -= XMVector3Normalize(XMVectorSetY(XMLoadFloat4(&_desc.contacts[i].vNormal), 0.f)) * _desc.contacts[i].fPenetration * fRatio;
+            else {                 
                 _vCommonDist -= XMVector3Normalize(XMLoadFloat4(&_desc.contacts[i].vNormal)) * _desc.contacts[i].fPenetration * fRatio;
-                iCommonCount++;
             } 
         }
     }
-    //if (iCommonCount > 1) _vCommonDist = _vCommonDist / (Engine::_float)iCommonCount;
     _vDist = XMVectorSetW(_vDist + _vCommonDist, 1.f);
     m_pOwnerObj->Get_MainTransform().lock()->Translate(_vDist, false);
+
+    auto _worldMatrix = m_pOwnerObj->Get_MainTransform().lock()->GetWorldMatrix();
+    for (size_t i = 0; i < 3; i++)
+    {
+        if (m_pBounding[i]) {
+            m_pBounding[i]->Update(_worldMatrix);
+            if (m_desc.m_collidorDesc->m_eBoundingSrcType == ENUM_TO_UINT(EBOUNDINGSOURCE::BONEDRIVEN)) {
+                m_pBounding[i]->UpdateWithBone(
+                    m_wpModel.lock()->FindBoneWithIdx(m_desc.m_collidorDesc[i].m_iSrcBoneIdx),
+                    m_wpModel.lock()->FindBoneWithIdx(m_desc.m_collidorDesc[i].m_iDstBoneIdx)
+                );
+            }
+        }
+    }
 }
 
 _bool CCollidor::RayCast(RAY ray, _float& fOutDist)

@@ -64,7 +64,7 @@ HRESULT CTerrainRenderer::AddRenderGroup()
 	WPRenderer wpRenderer = dynamic_pointer_cast<CRenderer>(m_wpComponent.lock());
 	
 	//Select RenderGroup
-	// Èì depth prepass´Â »ý·«
+	// ï¿½ï¿½ depth prepassï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	m_pGameInstance->Add_RenderGroup(RENDERGROUP::NONBLEND, wpRenderer);
 
 	return S_OK;
@@ -89,8 +89,10 @@ HRESULT CTerrainRenderer::Bind_Resources()
 
 
 	if (auto _spTerrain = m_wpTerrain.lock()) {
-		auto _vScale = _spTerrain->GetSplatScale();
+		auto _vScale			= _spTerrain->GetSplatScale();
+		auto _vTraistionScale	= _spTerrain->GetTrasitionScale();
 		m_wpShaderCom.lock()->Bind_RawData("g_vSplatScale", &_vScale, sizeof _float4);
+		m_wpShaderCom.lock()->Bind_RawData("g_fTransition", &_vTraistionScale, sizeof _float);
 		m_wpShaderCom.lock()->Bind_ShaderResourceView("g_SplatMapTexture", _spTerrain->GetSplatMap());
 		if (auto _spAsset = _spTerrain->Get_TileAsset(0)) {
 			auto pAsset = static_cast<CTextureAsset*>(_spAsset.get());

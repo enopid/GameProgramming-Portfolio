@@ -115,7 +115,6 @@ _matrix CAnimation::Update_Additive_TransformationMatrices(_float fTimeDelta, co
 	for (size_t i = 0; i < m_iNumChannels; i++)
 	{
 		if (m_desc.m_iRootBoneIdx != -1 && m_vecChannels[i]->IsGivenBoneChannel(m_desc.m_iRootBoneIdx)) {
-			//ÇöÀç´Â Æ®·£½½·¹ÀÌ¼Ç¸¸
 			_matRootLocal = m_vecChannels[i]->Update_Additive_RootTransformationMatrices(m_fCurrentTrackPosition, Bones, refBones, m_desc.m_bLoop, fWeight);	//SRT
 		}
 		else
@@ -263,8 +262,8 @@ HRESULT CAnimation::Render_Animation_Property()
 
 	if (iDeleteCollidorIdx != -1) {
 		if (iDeleteCollidorIdx < m_vecNotifies.size()) {
-			m_vecNotifies[iDeleteCollidorIdx] = m_vecNotifies.back();  // ¸Ç µÚ °ªÀ» °¡Á®¿È
-			m_vecNotifies.pop_back();         // ¸¶Áö¸· ¿ø¼Ò Á¦°Å
+			m_vecNotifies[iDeleteCollidorIdx] = m_vecNotifies.back();  // ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+			m_vecNotifies.pop_back();         // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		}
 		sort(m_vecNotifies.begin(), m_vecNotifies.end(), [](const ANIMNOTIFY_DESC& _desc0, const ANIMNOTIFY_DESC& _desc1) {
 			return _desc0.m_fPosition < _desc1.m_fPosition;

@@ -1,7 +1,7 @@
 #include "BT_Task_Wait.h"
 #include "GameInstance.h"
 
-CBT_Task_Wait::CBT_Task_Wait()
+CBT_Task_Wait::CBT_Task_Wait() :CBT_Task()
 {
 }
 
@@ -44,8 +44,8 @@ CBT_Task_Wait* CBT_Task_Wait::Create(void* pArg)
 
 bool CBT_Task_Wait::CheckSuccess()
 {
-    //½Ã°£ÀÌ ´ÙµÇ°Å³ª Á¶°Ç¸¸Á·
-    //½Ã°£ÀÌ ´ÙµÇ°í   Á¶°Ç¸¸Á·
+    //ï¿½Ã°ï¿½ï¿½ï¿½ ï¿½ÙµÇ°Å³ï¿½ ï¿½ï¿½ï¿½Ç¸ï¿½ï¿½ï¿½
+    //ï¿½Ã°ï¿½ï¿½ï¿½ ï¿½ÙµÇ°ï¿½   ï¿½ï¿½ï¿½Ç¸ï¿½ï¿½ï¿½
     // 
     bool bIsSuccess = false;
     if (m_upTimer->IsActive()) {

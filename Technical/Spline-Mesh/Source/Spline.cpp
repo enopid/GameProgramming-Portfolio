@@ -56,6 +56,7 @@ void CSpline::Update(_float fTimeDelta)
 	
 	if (m_bRecalc)
 		CalcSplineDesc();
+
 	if (m_bRebakeRenderer)
 		RebakeRenderer();
 
@@ -66,7 +67,6 @@ void CSpline::Update(_float fTimeDelta)
 
 void CSpline::CalcSplineDesc()
 {
-
 	int _idx = 0;
 	for (auto& _desc : m_vecSplineDescs) {
 		_desc.g_vOffset.w = m_desc.m_fSegmentInterval;
@@ -254,7 +254,7 @@ void CSpline::Render_Properties()
 	ImGui::SliderFloat("Length", &DEBUGLENGTH, 0.f, m_fMaxLength);
 
 	DEBUGPOINT_DESC _ptDesc;
-	_ptDesc.fSize = 1.f;
+	_ptDesc.fSize = 0.3f;
 	_ptDesc.eColor[0] = Colors::Red;
 	for (size_t i = 0; i < m_vecPathPoints.size(); i++)
 	{
@@ -271,25 +271,22 @@ void CSpline::Render_Properties()
 void CSpline::CreatePath()
 {
 	m_bRecalc = true;
+
+	//트랜스폼 컴포넌트의 형태로 관리하는 제어점의 위치를 저장하는 벡터
 	m_vecPathPoints.clear();
 	auto _vecTransforms = Get_Components<CTransform>();
-	for (size_t i = 1; i < _vecTransforms.size(); i++)
-	{
+	for (size_t i = 1; i < _vecTransforms.size(); i++) {
 		_float4 tmpPos;
 		ConvertWPComponent<CTransform>(_vecTransforms[i]).lock()->Set_Parent(this, true);
-		XMStoreFloat4(
-			&tmpPos,
-			ConvertWPComponent<CTransform>(_vecTransforms[i]).lock()->Get_WorldState(STATE::POSITION)
-		);
+		XMStoreFloat4(&tmpPos, ConvertWPComponent<CTransform>(_vecTransforms[i]).lock()->Get_WorldState(STATE::POSITION));
 		m_vecPathPoints.push_back(tmpPos);
-
 	}
 	if (m_vecPathPoints.empty()) return;
 
-	auto _vPrevPos = XMLoadFloat4(&m_vecPathPoints[0]);
-	_float fAccRatio = 0.f;
-	_float fAccLength = 0.f;
+	//제어점을 CatmullRom으로 보간한 곡선 기준으로 구간마다 특정 개수만큼 샘플링하여 전체 경로 상에서의 (진행 비율, 진행 거리)를 관리하는 벡터
 	m_vecSamples.clear();
+	auto _vPrevPos = XMLoadFloat4(&m_vecPathPoints[0]);
+	_float fAccRatio(0.f), fAccLength(0.f);
 	for (_int seg = 0; seg < m_vecPathPoints.size() - 1; seg++)
 	{
 		fAccRatio = (_float)seg;
@@ -302,20 +299,13 @@ void CSpline::CreatePath()
 		m_vecSamples.push_back({ fAccRatio, fAccLength });
 		fAccRatio += 1.f / m_desc.m_iSampleCnt;
 		_vPrevPos = P1;
-
+		//두 제어점 사이의 공간을 m_desc.m_iSampleCnt만큼 샘플링을 시행
 		for (int i = 0; i < m_desc.m_iSampleCnt; i++)
 		{
-			auto _vPos = XMVectorCatmullRom(
-				P0,
-				P1,
-				P2,
-				P3,
-				(i + 1.f) / m_desc.m_iSampleCnt
-			);
-
+			auto _vPos = XMVectorCatmullRom( P0, P1, P2, P3, (i + 1.f) / m_desc.m_iSampleCnt);
 			fAccLength += XMVectorGetX(XMVector3Length(_vPos - _vPrevPos));
 			m_vecSamples.push_back({ fAccRatio, fAccLength });
-			fAccRatio += 1.f / m_desc.m_iSampleCnt;
+			fAccRatio  += 1.f / m_desc.m_iSampleCnt;
 			_vPrevPos = _vPos;
 		}
 	}
@@ -335,19 +325,19 @@ _vector CSpline::GetPos(_float fLength)
 {
 	_vector _vPos = XMVectorSet(0.f, 0.f, 0.f, 1.f);
 
-	_int _iSampleIdx = 0;
-	if (m_vecPathPoints.size() >= 2) {
-		while (m_vecSamples.size() > _iSampleIdx + 1 && m_vecSamples[_iSampleIdx + 1].second <= fLength) {
-			_iSampleIdx++;
-		}
+	auto it = std::upper_bound(m_vecSamples.begin(), m_vecSamples.end(), fLength,
+		[](float length, const auto& sample) {return length < sample.second; }
+	);
 
-		if (m_vecSamples.size() <= _iSampleIdx + 1) {
-			_vPos = XMLoadFloat4(&m_vecPathPoints.back());
-		}
+	if (it != m_vecSamples.begin())  --it;
+	_int _iSampleIdx = static_cast<_int>(it - m_vecSamples.begin());
+
+	if (m_vecPathPoints.size() >= 2) {
+
+		if (m_vecSamples.size() <= _iSampleIdx + 1) { _vPos = XMLoadFloat4(&m_vecPathPoints.back()); }
 		else {
 			auto t0 = m_vecSamples[_iSampleIdx + 0].first;
 			auto t1 = m_vecSamples[_iSampleIdx + 1].first;
-
 			auto l0 = m_vecSamples[_iSampleIdx + 0].second;
 			auto l1 = m_vecSamples[_iSampleIdx + 1].second;
 
@@ -355,31 +345,21 @@ _vector CSpline::GetPos(_float fLength)
 			_float fRatio = t0 - seg;
 			fRatio += (t1 - t0) * (fLength - l0) / (l1 - l0 + 0.0001f);
 
-
 			auto P0 = XMLoadFloat4(&m_vecPathPoints[clamp(seg - 1, 0, int(m_vecPathPoints.size()) - 1)]);
 			auto P1 = XMLoadFloat4(&m_vecPathPoints[clamp(seg + 0, 0, int(m_vecPathPoints.size()) - 1)]);
 			auto P2 = XMLoadFloat4(&m_vecPathPoints[clamp(seg + 1, 0, int(m_vecPathPoints.size()) - 1)]);
 			auto P3 = XMLoadFloat4(&m_vecPathPoints[clamp(seg + 2, 0, int(m_vecPathPoints.size()) - 1)]);
 
-			_vPos = XMVectorCatmullRom(
-				P0,
-				P1,
-				P2,
-				P3,
-				fRatio
-			);
+			_vPos = XMVectorCatmullRom(P0, P1, P2, P3, fRatio);
 		}
 	}
-
 	return _vPos;
 }
 
 _vector CSpline::GetDir(_float fLength, _float fDelta)
 {
 	fLength = min(fLength, m_fMaxLength);
-	auto _vSrt = GetPos(max(fLength - fDelta, 0.f));
-	auto _vDst = GetPos(max(fLength + fDelta, 0.f));
-	return XMVectorSetW(XMVector3Normalize(_vDst - _vSrt), 0.f);
+	return XMVectorSetW(XMVector3Normalize(GetPos(max(fLength + fDelta, 0.f)) - GetPos(max(fLength - fDelta, 0.f))), 0.f);
 }
 
 _float CSpline::GetMaxLength()

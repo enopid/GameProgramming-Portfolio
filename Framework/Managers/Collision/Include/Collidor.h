@@ -54,6 +54,7 @@ private:
 	HRESULT SetCustomSetting	(_uint idx);
 protected:
 	void Update(float fDeltaTime) override;
+	void Late_Update(float fDeltaTime) override;
 public:
 	virtual HRESULT Initialize_Prototype(void* pArg);
 	virtual HRESULT Initialize(void* pDesc);

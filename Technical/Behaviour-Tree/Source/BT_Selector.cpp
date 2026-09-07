@@ -1,7 +1,7 @@
 #include "BT_Selector.h"
 #include "BT_Decorator.h"
 
-CBT_Selector::CBT_Selector()
+CBT_Selector::CBT_Selector() : CBT_Composit()
 {
 }
 
@@ -26,11 +26,11 @@ CBT_Node::ESTATE CBT_Selector::Update(_float fTimeDelta)
         m_eState            = eState;
         m_iCurrentChildIdx  = i;
         if (in(eState, { ESTATE::ES_SUCCESS , ESTATE::ES_RUNNING })) {
-            for (size_t i = 0; i < m_vecChildNodes.size(); i++) if (m_iCurrentChildIdx != i) m_vecChildNodes[i]->OnAbort(0);
+            for (size_t i = 0; i < m_vecChildNodes.size(); i++) if (m_iCurrentChildIdx != i) 
+                m_vecChildNodes[i]->OnAbort(0);
             return eState;
         }
     }
-    Exit();
     return ESTATE::ES_FAIL;
 }
 
@@ -38,7 +38,7 @@ CBT_Selector* CBT_Selector::Create(void* pArg)
 {
     CBT_Selector* pSequence = new CBT_Selector();
     if (FAILED(pSequence->Initialize(pArg))) {
-        MSG_BOX("Fail to Create Sequence");
+        MSG_BOX("Fail to Create Selector");
         return nullptr;
     }
     return pSequence;
@@ -52,6 +52,4 @@ void CBT_Selector::OnAbort(int iLowerPriority)
         m_vecChildNodes[i]->OnAbort(0);
     }
     Exit();
-
-
 }

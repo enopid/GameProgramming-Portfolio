@@ -194,8 +194,6 @@ PS_OUT PS_WAVE(PS_IN In)
     return Out;
 }
 
-float fDepthWeight  = 1.f;
-float fNormalWeight = 1.f;
 PS_OUT PS_SSAO(PS_IN In)
 {
     PS_OUT Out;
@@ -203,17 +201,29 @@ PS_OUT PS_SSAO(PS_IN In)
     vector  vDepthDesc  = g_DepthTexture.Sample(DefaultSampler, In.vTexcoord);
     vector  vNormalDesc = g_NormalTexture.Sample(DefaultSampler, In.vTexcoord);
 
-    float px = 1.f / 1280.f;
-    float py = 1.f / 720.f;
-    float fDepthEdge    = GetDepthEdge    (g_DepthTexture,    In.vTexcoord, float2(px, py));
-    float fNormalEdge   = GetNormalEdge   (g_NormalTexture,   In.vTexcoord, float2(px, py));
+    vector  vViewPos = Depth2View(vDepthDesc, 5000.f, In.vTexcoord, g_ProjMatrixInv);
 
-    float edge = max(
-        fDepthEdge  * fDepthWeight,
-        fNormalEdge * fNormalWeight
-    );
-    Out.vColor.rgb = edge;
-    Out.vColor.w = 1.f;
+    int KERNEL_SIZE = 16;
+    float occlusion = 0;
+
+   /* for (int i = 0; i < KERNEL_SIZE; i++)
+    {
+        float3 samplePos = pos + TBN * kernel[i] * radius;
+
+        float4 offset = mul(Proj, float4(samplePos, 1.0));
+        offset.xyz /= offset.w;
+        offset.xy = offset.xy * 0.5 + 0.5;
+
+        float sampleDepth = DepthTex.Sample(sampler, offset.xy);
+
+        float rangeCheck = smoothstep(0.0, 1.0, radius / abs(pos.z - sampleDepth));
+
+        if (sampleDepth < samplePos.z)
+            occlusion += rangeCheck;
+    }
+
+    occlusion = 1.0 - (occlusion / KERNEL_SIZE);*/
+
     return Out;
 }
 

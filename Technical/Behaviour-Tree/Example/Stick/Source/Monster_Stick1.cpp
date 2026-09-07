@@ -23,7 +23,7 @@ CGameObject* CMonster_Stick1::Clone(void* pArg)
 CBT_Node* CMonster_Stick1::CreateNode_Combat()
 {
     CBT_Node::BT_NODE_DESC _selDesc;
-    _selDesc.m_sNodeTag = L"Combat_Selector";
+    _selDesc.m_sNodeTag = L"Selector\n(Combat)";
     auto pSelector_Atk = CBT_Selector::Create(&_selDesc);
     auto meleeRange = CreateDecorator_TargetInRange(0.f, m_fMidRange);
     auto midRange   = CreateDecorator_TargetInRange(m_fMidRange, m_fLongRange);
@@ -41,7 +41,7 @@ CBT_Node* CMonster_Stick1::CreateNode_Combat()
 CBT_Node* CMonster_Stick1::CreateNode_Hit()
 {
     CBT_Node::BT_NODE_DESC _seqDesc;
-    _seqDesc.m_sNodeTag = L"Hit_Seq";
+    _seqDesc.m_sNodeTag = L"Sequence\n(Hit)";
     auto pSequence_HitSeq = CBT_Sequence::Create(&_seqDesc);
 
     auto _pCondTask     = CreateTask_Condition([=]() {return m_bIsHit; });
@@ -55,7 +55,7 @@ CBT_Node* CMonster_Stick1::CreateNode_Hit()
     _pTask_HitAnim2->AddExitFunc([=](CBT_Node* _pNode)  {m_bIsHit           = false; });
 
     CBT_Node::BT_NODE_DESC _selDesc;
-    _selDesc.m_sNodeTag = L"Hit_Selector";
+    _selDesc.m_sNodeTag = L"Selector\n(HitType)";
     auto pSelector_Hit = CBT_Selector::Create(&_selDesc);
     auto SmallDMG   = CreateDecorator_Condition([=]() {return m_fLastDamage <= 30.f; });
     auto MidDMG     = CreateDecorator_Condition([=]() {return m_fLastDamage > 30.f && m_fLastDamage <= 50.f; });
@@ -80,7 +80,7 @@ CBT_Node* CMonster_Stick1::CreateNode_Hit()
 CBT_Node* CMonster_Stick1::CreateNode_MeleeCombat()
 {
     CBT_Node::BT_NODE_DESC _seqDesc;
-    _seqDesc.m_sNodeTag = L"Melee_Seq";
+    _seqDesc.m_sNodeTag = L"Sequence\n(Melee)";
     auto pSequence_AtkSeq = CBT_Sequence::Create(&_seqDesc);
     
     auto pDecorator_ForceTrue   = CreateDecorator_ForceResult(true);
@@ -88,7 +88,7 @@ CBT_Node* CMonster_Stick1::CreateNode_MeleeCombat()
     pDecorator_ForceTrue->AddChildNode(pTask_MoveTo);
 
     CBT_Node::BT_NODE_DESC _randoSelDesc;
-    _randoSelDesc.m_sNodeTag = L"Melee_randomSel";
+    _randoSelDesc.m_sNodeTag = L"Random Selector\n(Melee)";
     auto pRandomSelector_AtkSel     = CBT_RandomSelector::Create(&_randoSelDesc);
     auto pTask_AnimPlay_Atk1        = CreateTask_PlayAnimation(MA_ATK_1);
     pTask_AnimPlay_Atk1->AddEnterFunc([=](auto) { m_iDamageType = 0; });
@@ -112,11 +112,11 @@ CBT_Node* CMonster_Stick1::CreateNode_MidCombat()
 {
 
     CBT_Node::BT_NODE_DESC _randoSelDesc;
-    _randoSelDesc.m_sNodeTag = L"Melee_randomSel";
+    _randoSelDesc.m_sNodeTag = L"Random Selector\n(Mid)";
     auto pRandomSelector_AtkSel = CBT_RandomSelector::Create(&_randoSelDesc);
 
     CBT_Node::BT_NODE_DESC _seqDesc;
-    _seqDesc.m_sNodeTag = L"Charge_Seq";
+    _seqDesc.m_sNodeTag = L"Sequence\n(Charge)";
     auto pSequence_AtkSeq = CBT_Sequence::Create(&_seqDesc);
     auto pTask_AnimPlay_ChargeInto      = CreateTask_PlayAnimation(5);
     auto pTask_AnimPlay_ChargeLoop      = CreateTask_PlayAnimation(6, true);
@@ -145,13 +145,13 @@ CBT_Node* CMonster_Stick1::CreateNode_MidCombat()
 CBT_Node* CMonster_Stick1::CreateNode_LongCombat()
 {
     CBT_Node::BT_NODE_DESC _longRandomSelDesc;
-    _longRandomSelDesc.m_sNodeTag = L"Long_randomSel";
+    _longRandomSelDesc.m_sNodeTag = L"Random Selector\n(Long)";
     auto pRandomSelector_LongSel = CBT_RandomSelector::Create(&_longRandomSelDesc);
     auto pTask_AnimPlay_AtkRock = CreateTask_PlayAnimation(4);
 
 
     CBT_Node::BT_NODE_DESC _seqDesc;
-    _seqDesc.m_sNodeTag = L"Chase_Seq";
+    _seqDesc.m_sNodeTag = L"Sequence\n(Chase)";
     auto pSequence_Chase = CBT_Sequence::Create(&_seqDesc);
     auto pTask_AnimPlay_Chase = CreateTask_PlayAnimation(8, true);
     auto pTask_LongMoveTo = CreateTask_MoveTo(m_fMidRange, m_fDeAggroRange, m_fWalkSpeed);
@@ -228,6 +228,7 @@ void CMonster_Stick1::Revive()
     wstring sTag = L"SFX_Enemy_Stick_Ressurect";
     sTag += to_wstring(Random(0, 2));
     m_pGameInstance->Play_SFX(sTag, 0.7f);
+    m_fNameplateOffset = 20.f;
 }
 
 void CMonster_Stick1::InitializeNotifies()
@@ -332,19 +333,19 @@ void CMonster_Stick1::SetBT()
 {
     __super::SetBT();
     CBT_Node::BT_NODE_DESC _selDesc;
-    _selDesc.m_sNodeTag = L"State_Selector";
+    _selDesc.m_sNodeTag = L"Selector\n(State)";
     auto pSelector_State = CBT_Selector::Create(&_selDesc);
 
     pSelector_State->AddChildNode(CreateNode_Revive (MA_REACTION_REVIVE));
     pSelector_State->AddChildNode(CreateNode_Dead   (MA_REACTION_DIE));
-    //pSelector_State->AddChildNode(CreateNode_Bind   (MA_REACTION_BIND));
+    pSelector_State->AddChildNode(CreateNode_Bind   (MA_REACTION_BIND));
     pSelector_State->AddChildNode(CreateNode_Parry  (MA_REACTION_PARRY));
     pSelector_State->AddChildNode(CreateNode_Hit    ());
     pSelector_State->AddChildNode(CreateNode_Bomb   (MA_REACTION_BOMB));
     //Combat
 
     CBT_Node::BT_NODE_DESC _randoSelDesc;
-    _randoSelDesc.m_sNodeTag = L"Combat_randomSel";
+    _randoSelDesc.m_sNodeTag = L"Random Selector\n(Combat)";
     auto pRandomSelector_Sel = CBT_RandomSelector::Create(&_randoSelDesc);
     pRandomSelector_Sel->AddChildNode(CreateNode_Combat(), 4.f);
     pRandomSelector_Sel->AddChildNode(CreateNode_Taunt({ MA_REACTION_TAUNT }), 1.f);

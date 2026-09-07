@@ -31,7 +31,7 @@ void XM_CALLCONV BoundingCapsule::Transform(BoundingCapsule& Out, FXMMATRIX M) c
 
 bool BoundingCapsule::Intersects(_In_ const BoundingCapsule& cs) const noexcept
 {
-    //Á÷¼±»çÀÌÀÇ ÃÖ±ÙÁ¢Á¡
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö±ï¿½ï¿½ï¿½ï¿½ï¿½
     auto _srcRay = GetRay();
     auto _dstRay = cs.GetRay();
 
@@ -39,11 +39,11 @@ bool BoundingCapsule::Intersects(_In_ const BoundingCapsule& cs) const noexcept
     _vector v = XMLoadFloat4(&_dstRay.vRayDir);                                        //v
     _vector w = XMLoadFloat4(&_srcRay.vRayOrigin) - XMLoadFloat4(&_dstRay.vRayOrigin); //w
 
-    auto a = XMVector3Dot(u, u); // AÀÇ ±æÀÌ
-    auto b = XMVector3Dot(u, v); // A B ³»Àû
-    auto c = XMVector3Dot(v, v); // BÀÇ ±æÀÌ
-    auto d = XMVector3Dot(u, w); //½ÃÀÛÁ¡ A ³»Àû
-    auto e = XMVector3Dot(v, w); //½ÃÀÛÁ¡ B ³»Àû
+    auto a = XMVector3Dot(u, u); // Aï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    auto b = XMVector3Dot(u, v); // A B ï¿½ï¿½ï¿½ï¿½
+    auto c = XMVector3Dot(v, v); // Bï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    auto d = XMVector3Dot(u, w); //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ A ï¿½ï¿½ï¿½ï¿½
+    auto e = XMVector3Dot(v, w); //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ B ï¿½ï¿½ï¿½ï¿½
 
     float a_ = XMVectorGetX(a);
     float b_ = XMVectorGetX(b);
@@ -55,7 +55,7 @@ bool BoundingCapsule::Intersects(_In_ const BoundingCapsule& cs) const noexcept
     float sN, sD = D_;
     float tN, tD = D_;
 
-    if (D_ < 1e-6f) // °ÅÀÇ ÆòÇà
+    if (D_ < 1e-6f) // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     {
         sN = 0.0f;
         sD = 1.0f;
@@ -246,13 +246,13 @@ bool XM_CALLCONV BoundingCapsule::Intersects(_In_ FXMVECTOR Origin, _In_ FXMVECT
     _vector v = XMLoadFloat4(&_dstRay.vRayDir);                                        //v
     _vector w = XMLoadFloat4(&_srcRay.vRayOrigin) - XMLoadFloat4(&_dstRay.vRayOrigin); //w
 
-    auto a = XMVector3Dot(u, u); // AÀÇ ±æÀÌ
-    auto b = XMVector3Dot(u, v); // A B ³»Àû
-    auto c = XMVector3Dot(v, v); // BÀÇ ±æÀÌ
-    auto d = XMVector3Dot(u, w); //½ÃÀÛÁ¡ A ³»Àû
-    auto e = XMVector3Dot(v, w); //½ÃÀÛÁ¡ B ³»Àû
+    auto a = XMVector3Dot(u, u); // Aï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    auto b = XMVector3Dot(u, v); // A B ï¿½ï¿½ï¿½ï¿½
+    auto c = XMVector3Dot(v, v); // Bï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    auto d = XMVector3Dot(u, w); //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ A ï¿½ï¿½ï¿½ï¿½
+    auto e = XMVector3Dot(v, w); //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ B ï¿½ï¿½ï¿½ï¿½
 
-    auto D = a * c - b * b;     //A^2 B^2 sin^2 / 0ÀÏ½Ã ¼¼Å¸°¡ 0ÀÌ¶ó ÆòÇàÇÔ
+    auto D = a * c - b * b;     //A^2 B^2 sin^2 / 0ï¿½Ï½ï¿½ ï¿½ï¿½Å¸ï¿½ï¿½ 0ï¿½Ì¶ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     float s, t;
     if (abs(XMVectorGetX(D)) < 0.00001f) {
         s = 0;
@@ -290,7 +290,7 @@ RAY BoundingCapsule::GetRay() const
     return _ray;
 }
 
-//ÁÞ¤¡
+//ï¿½Þ¤ï¿½
 void BoundingCapsule::CreateFromPoints(_Out_ BoundingCapsule& Out, _In_ size_t Count,
     _In_reads_bytes_(sizeof(XMFLOAT3) + Stride * (Count - 1)) const XMFLOAT3* pPoints, _In_ size_t Stride) noexcept
 {

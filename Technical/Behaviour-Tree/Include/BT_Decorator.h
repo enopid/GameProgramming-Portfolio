@@ -10,9 +10,9 @@ class ENGINE_DLL CBT_Decorator : public CBT_Node
 	CBT_Decorator& operator=(const CBT_Decorator& Prototype) = delete;
 public:
 	enum class EABORTMODE { 
-		NONE,			//Á¶°Ç ¹Ì¸¸Á·½Ãµµ ÇÏ´ø Çàµ¿ Áö¼Ó
-		SELF,			//Á¶°Ç ¹Ì¸¸Á·½Ã¿¡ ÇÏ´ø Çàµ¿ Ãë¼Ò
-		LOWERPRIORITY,	//Á¶°Ç ¸¸Á·½Ã ³·Àº ¿ì¼±¼øÀ§ Áß´Ü
+		NONE,			//ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½ï¿½ï¿½ï¿½Ãµï¿½ ï¿½Ï´ï¿½ ï¿½àµ¿ ï¿½ï¿½ï¿½ï¿½
+		SELF,			//ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½ï¿½ï¿½ï¿½Ã¿ï¿½ ï¿½Ï´ï¿½ ï¿½àµ¿ ï¿½ï¿½ï¿½
+		LOWERPRIORITY,	//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ì¼±ï¿½ï¿½ï¿½ï¿½ ï¿½ß´ï¿½
 		BOTH			//Self + LOWERPRIORITY
 	};
 
@@ -46,7 +46,12 @@ protected:
 
 	bool       m_bLastCondition = true;
 
-	// CBT_NodeÀ»(¸¦) ÅëÇØ »ó¼ÓµÊ
+	// CBT_Nodeï¿½ï¿½(ï¿½ï¿½) ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Óµï¿½
 	void OnAbort(int iLowerPriority) override;
+
+	virtual void SetGVNodePos() override;
+	// CBT_Nodeì„(ë¥¼) í†µí•´ ìƒì†ë¨
+	RECT DrawNode(Agraph_t* pGraph) override;
+	ed::LinkId m_LinkId;
 };
 NS_END

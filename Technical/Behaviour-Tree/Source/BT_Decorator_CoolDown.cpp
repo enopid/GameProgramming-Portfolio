@@ -1,6 +1,6 @@
 #include "BT_Decorator_Cooldown.h"
 
-CBT_Decorator_Cooldown::CBT_Decorator_Cooldown()
+CBT_Decorator_Cooldown::CBT_Decorator_Cooldown() : CBT_Decorator()
 {
 }
 

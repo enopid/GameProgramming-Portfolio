@@ -29,7 +29,11 @@ private:
 	virtual void	Running(float fDeltaTime);
 protected:
 	BT_Task_Desc			m_desc;
-	void OnAbort(int iLowerPriority) override; //Pritority Param will be Ignored
+	void OnAbort(int iLowerPriority) override;
+	// CBT_Node을(를) 통해 상속됨
+	RECT DrawNode(Agraph_t* pGraph) override;
+
+	//Pritority Param will be Ignored
 };
 
 NS_END

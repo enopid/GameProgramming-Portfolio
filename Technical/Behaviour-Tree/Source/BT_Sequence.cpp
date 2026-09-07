@@ -1,6 +1,7 @@
 #include "BT_Sequence.h"
 
 CBT_Sequence::CBT_Sequence()
+    : CBT_Composit()
 {
 }
 
@@ -20,7 +21,6 @@ CBT_Node::ESTATE CBT_Sequence::Update(_float fTimeDelta)
         }
         else if (eState == ESTATE::ES_FAIL) {
             m_iCurrentChildIdx = 0;
-            Exit();
             return ESTATE::ES_FAIL;
         }
         else if (eState == ESTATE::ES_RUNNING) {
@@ -28,7 +28,6 @@ CBT_Node::ESTATE CBT_Sequence::Update(_float fTimeDelta)
         }
     }
     m_iCurrentChildIdx = 0;
-    Exit();
     return ESTATE::ES_SUCCESS;
 }
 

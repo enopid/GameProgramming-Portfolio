@@ -1,6 +1,9 @@
 #include "BT_Task.h"
+#include "cgraph.h"
+#include "gvc.h"
 
 CBT_Task::CBT_Task()
+    : CBT_Node()
 {
 }
 
@@ -62,4 +65,68 @@ void CBT_Task::Running(float fDeltaTime)
 void CBT_Task::OnAbort(int iLowerPriority)
 {
     Exit();
+}
+
+RECT CBT_Task::DrawNode(Agraph_t* pGraph)
+{
+    ed::PushStyleVar(ed::StyleVar_SourceDirection, ImVec2(0.f, 1.f));
+    ed::PushStyleVar(ed::StyleVar_TargetDirection, ImVec2(0.f, -1.f));
+    if (m_eNodeState == CBT_Node::ESTATE::ES_RUNNING) {
+        ed::PushStyleColor(
+            ed::StyleColor_NodeBg,
+            ImColor(208, 215, 15)
+        );
+    }
+    else if (m_eNodeState == CBT_Node::ESTATE::ES_FAIL) {
+        ed::PushStyleColor(
+            ed::StyleColor_NodeBg,
+            ImColor(240, 15, 15)
+        );
+    }
+    else if (m_eNodeState == CBT_Node::ESTATE::ES_SUCCESS) {
+        ed::PushStyleColor(
+            ed::StyleColor_NodeBg,
+            ImColor(15, 215, 15)
+        );
+    }
+    else {
+        ed::PushStyleColor(
+            ed::StyleColor_NodeBg,
+            ImColor(73, 72, 73)
+        );
+    }
+    m_eNodeState = m_eState;
+
+    //PushFont
+    string _nodeName = ws2s(m_nodeDesc.m_sNodeTag);
+    ImVec2 _textSize = ImGui::CalcTextSize(_nodeName.c_str());
+    float bodyWidth  = max(_textSize.x + BODY_PADDINGX * 2.f, 40.f);
+    float bodyHeight = 20.f;
+    float pinWidth   = bodyWidth - PIN_PADDINGX * 2.f;
+
+    ed::BeginNode(m_NodeID);
+
+    //toppin
+    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + PIN_PADDINGX);
+    ed::BeginPin(m_InputPinID, ed::PinKind::Input);
+    ImGui::Dummy(ImVec2(pinWidth, PIN_HEIGHT));
+    ed::EndPin();
+
+    //body
+    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + BODY_PADDINGX);
+    ImGui::Text("%s", ws2s(m_nodeDesc.m_sNodeTag).c_str());
+    ImGui::SameLine();
+    ImGui::Dummy(ImVec2(BODY_PADDINGX, 0.f));
+
+
+    ed::EndNode();
+
+    ed::PopStyleVar(2);
+    ed::PopStyleColor(1);
+
+    std::string gvID = std::to_string(m_NodeID.Get());
+    m_pGVNode = agnode(pGraph, gvID.data(), 1);
+    SetGVNodeSize();
+
+    return m_NodeRect;
 }

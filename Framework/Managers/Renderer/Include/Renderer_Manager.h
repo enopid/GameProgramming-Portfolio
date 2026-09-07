@@ -142,8 +142,6 @@ private:
 	void Update();
 	Engine::_float DiffuseApproach(Engine::_float fCurrent, Engine::_float fTarget, Engine::_float fStep);
 
-	HRESULT ReadyWholeRT();
-
 	RM_DESC						m_tDesc;
 	ID3D11Device*				m_pDevice																							= { nullptr };
 	ID3D11DeviceContext*		m_pContext																							= { nullptr };
@@ -206,9 +204,6 @@ private:
 	//HP
 	Engine::_bool				m_bLowHP	= {};
 	Engine::_float				m_fLowHP	= {};
-
-	//Debug
-	Engine::_float				m_fDebugU = { 1.f };
 public:
 	static CRenderer_Manager* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	void		SetUP();

@@ -94,20 +94,21 @@ CONTACTMF_DESC CBounding_Capsule::GetManifold(CBounding* pTarget)
 void CBounding_Capsule::UpdateWithBone(CBone* pSrcBone, CBone* pDstBone)
 {
 	__super::UpdateWithBone(pSrcBone, pDstBone);
-	if (pSrcBone && !pDstBone) {
+	if (pSrcBone && !pDstBone) { //single bone
 		XMStoreFloat3(
 			&m_pOriginalDesc->Center,
 			XMLoadFloat3(&m_vSrcBonePos)
 		);
 	}
-	else if (pSrcBone && pDstBone) {
-		XMStoreFloat3(
-			&m_pOriginalDesc->Center,
-			(XMLoadFloat3(&m_vSrcBonePos) + XMLoadFloat3(&m_vDstBonePos)) * 0.5f
-		);
+	else if (pSrcBone && pDstBone) { //two-bone
+		//center
+		XMStoreFloat3( &m_pOriginalDesc->Center, (XMLoadFloat3(&m_vSrcBonePos) + XMLoadFloat3(&m_vDstBonePos)) * 0.5f );
 
+		//length
 		auto _vDir = (XMLoadFloat3(&m_vDstBonePos) - XMLoadFloat3(&m_vSrcBonePos));
 		m_pOriginalDesc->HalfHeight = XMVectorGetX(XMVector3Length(_vDir)) * 0.5f;
+
+		//orientation
 		if (abs(m_pOriginalDesc->HalfHeight) > 0.00001f) {
 			XMVECTOR q = XMLoadFloat4(&m_pOriginalDesc->Orientation);
 			XMMATRIX m = XMMatrixRotationQuaternion(q);
@@ -116,22 +117,20 @@ void CBounding_Capsule::UpdateWithBone(CBone* pSrcBone, CBone* pDstBone)
 			XMVECTOR vAxisY = XMVectorSetW(XMVector3TransformNormal(XMVectorSet(0.f, 1.f, 0.f, 0.f), m),0.f);
 			XMVECTOR vAxisZ = XMVectorSetW(XMVector3TransformNormal(XMVectorSet(0.f, 0.f, 1.f, 0.f), m),0.f);
 			
+			//ë‘ ë³¸ê°„ì˜ ë°©í–¥ì„ ìº¡ìŠì˜ ë†’ì´ë¡œ ì‚¼ë„ë¡ ê¸°ì € ìž¬êµ¬ì„±
 			vAxisY = XMVectorSetW(XMVector3Normalize(_vDir), 0.f);
 
+			//Xëž‘ Zì—­ì‹œ ìƒˆë¡œìš´ Yì— ì§êµí•˜ê²Œë” ìž¬êµ¬ì„±
 			float dotXY = fabsf(XMVectorGetX(XMVector3Dot(vAxisX, vAxisY)));
-			if (dotXY > 0.99f)
-			{
+			if (dotXY > 0.99f) {
 				XMVECTOR worldUp = XMVectorSet(0.f, 1.f, 0.f, 0.f);
-				if (fabsf(XMVectorGetX(XMVector3Dot(worldUp, vAxisY))) > 0.99f)
+				if (fabsf(XMVectorGetX(XMVector3Dot(worldUp, vAxisY))) > 0.99f) 
 					worldUp = XMVectorSet(1.f, 0.f, 0.f, 0.f);
 
 				vAxisX = XMVector3Normalize(XMVector3Cross(worldUp, vAxisY));
 			}
-			else
-			{
-				vAxisX = XMVector3Normalize(
-					vAxisX - vAxisY * XMVectorGetX(XMVector3Dot(vAxisX, vAxisY))
-				);
+			else {
+				vAxisX = XMVector3Normalize( vAxisX - vAxisY * XMVectorGetX(XMVector3Dot(vAxisX, vAxisY)) );
 			}
 
 			vAxisZ = XMVectorSetW(XMVector3Normalize(XMVector3Cross(vAxisX, vAxisY)), 0.f);
@@ -231,11 +230,11 @@ CONTACTMF_DESC CBounding_Capsule::ComputeManifold(CBounding_AABB* pTarget)
 		_vector boxCenter	= XMLoadFloat3(&box.Center);
 		_vector extents		= XMLoadFloat3(&box.Extents);
 
-		// ¹Ú½º ·ÎÄÃ ÁÂÇ¥
+		// ï¿½Ú½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ç¥
 		_vector local = _vPoint - boxCenter;
 		_vector absLocal = XMVectorAbs(local);
 
-		// °¢ Ãà¿¡¼­ ³»ºÎ·Î µé¾î°£ °Å¸®
+		// ï¿½ï¿½ ï¿½à¿¡ï¿½ï¿½ ï¿½ï¿½ï¿½Î·ï¿½ ï¿½ï¿½î°£ ï¿½Å¸ï¿½
 		_vector delta = extents - absLocal;
 
 		float dx = XMVectorGetX(delta);
@@ -245,7 +244,7 @@ CONTACTMF_DESC CBounding_Capsule::ComputeManifold(CBounding_AABB* pTarget)
 		_vector normal;
 		float penetrationAxis = 0.f;
 
-		// °¡Àå penetrationÀÌ ÀÛÀº Ãà ¼±ÅÃ (MTV Ãà)
+		// ï¿½ï¿½ï¿½ï¿½ penetrationï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (MTV ï¿½ï¿½)
 		if (dx < dy && dx < dz)
 		{
 			normal = XMVectorSet(
@@ -273,12 +272,12 @@ CONTACTMF_DESC CBounding_Capsule::ComputeManifold(CBounding_AABB* pTarget)
 			penetrationAxis = dz;
 		}
 
-		// ÃÖÁ¾ penetration
+		// ï¿½ï¿½ï¿½ï¿½ penetration
 		float penetration = m_pDesc->Radius + penetrationAxis;
 
 		_desc.fPenetration = penetration;
 
-		// Á¢ÃË À§Ä¡´Â ¹Ú½º Ç¥¸é
+		// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Ú½ï¿½ Ç¥ï¿½ï¿½
 		_vector contactPoint = _vPoint + normal * m_pDesc->Radius;
 
 		XMStoreFloat4(&_desc.vNormal, normal);
@@ -368,11 +367,11 @@ CONTACTMF_DESC CBounding_Capsule::ComputeManifold(CBounding_OBB* pTarget)
 	else {
 		_vector extents = XMLoadFloat3(&box.Extents);
 
-		// ¹Ú½º ·ÎÄÃ ÁÂÇ¥
+		// ï¿½Ú½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ç¥
 		_vector local = _vPoint;
 		_vector absLocal = XMVectorAbs(local);
 
-		// °¢ Ãà¿¡¼­ ³»ºÎ·Î µé¾î°£ °Å¸®
+		// ï¿½ï¿½ ï¿½à¿¡ï¿½ï¿½ ï¿½ï¿½ï¿½Î·ï¿½ ï¿½ï¿½î°£ ï¿½Å¸ï¿½
 		_vector delta = extents - absLocal;
 
 		float dx = XMVectorGetX(delta);
@@ -382,7 +381,7 @@ CONTACTMF_DESC CBounding_Capsule::ComputeManifold(CBounding_OBB* pTarget)
 		_vector normal;
 		float penetrationAxis = 0.f;
 
-		// °¡Àå penetrationÀÌ ÀÛÀº Ãà ¼±ÅÃ (MTV Ãà)
+		// ï¿½ï¿½ï¿½ï¿½ penetrationï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (MTV ï¿½ï¿½)
 		if (dx < dy && dx < dz)
 		{
 			normal = XMVectorSet(
@@ -410,12 +409,12 @@ CONTACTMF_DESC CBounding_Capsule::ComputeManifold(CBounding_OBB* pTarget)
 			penetrationAxis = dz;
 		}
 
-		// ÃÖÁ¾ penetration
+		// ï¿½ï¿½ï¿½ï¿½ penetration
 		float penetration = m_pDesc->Radius + penetrationAxis;
 
 		_desc.fPenetration = penetration;
 
-		// Á¢ÃË À§Ä¡´Â ¹Ú½º Ç¥¸é
+		// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Ú½ï¿½ Ç¥ï¿½ï¿½
 		_vector contactPoint = _vPoint + normal * m_pDesc->Radius;
 
 		XMStoreFloat4(&_desc.vNormal, normal);
@@ -426,11 +425,11 @@ CONTACTMF_DESC CBounding_Capsule::ComputeManifold(CBounding_OBB* pTarget)
 
 	_matrix rot = XMMatrixRotationQuaternion(XMLoadFloat4(&box.Orientation));
 
-	// ³ë¸» (¹æÇâº¤ÅÍ ¡æ Normal transform)
+	// ï¿½ë¸» (ï¿½ï¿½ï¿½âº¤ï¿½ï¿½ ï¿½ï¿½ Normal transform)
 	_vector worldNormal = XMVector3TransformNormal(XMLoadFloat4(&_desc.vNormal), rot);
 	worldNormal = XMVector3Normalize(worldNormal);
 
-	// Á¢ÃËÁ¡ (ÁÂÇ¥ ¡æ Coord transform + Center º¹¿ø)
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½Ç¥ ï¿½ï¿½ Coord transform + Center ï¿½ï¿½ï¿½ï¿½)
 	_vector worldPos =
 		XMVector3TransformCoord(XMLoadFloat4(&_desc.vPosition), rot)
 		+ XMLoadFloat3(&box.Center);
@@ -501,7 +500,7 @@ CONTACTMF_DESC CBounding_Capsule::ComputeManifold(CBounding_Capsule* pTarget)
 		return _mfDesc;
 	}
 
-	//Á÷¼±»çÀÌÀÇ ÃÖ±ÙÁ¢Á¡
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö±ï¿½ï¿½ï¿½ï¿½ï¿½
 	auto _srcRay = m_pDesc->GetRay();
 	auto _dstRay = _pTargetDesc->GetRay();
 
@@ -509,11 +508,11 @@ CONTACTMF_DESC CBounding_Capsule::ComputeManifold(CBounding_Capsule* pTarget)
 	_vector v = XMLoadFloat4(&_dstRay.vRayDir);                                        //v
 	_vector w = XMLoadFloat4(&_srcRay.vRayOrigin) - XMLoadFloat4(&_dstRay.vRayOrigin); //w
 
-	auto a = XMVector3Dot(u, u); // AÀÇ ±æÀÌ
-	auto b = XMVector3Dot(u, v); // A B ³»Àû
-	auto c = XMVector3Dot(v, v); // BÀÇ ±æÀÌ
-	auto d = XMVector3Dot(u, w); //½ÃÀÛÁ¡ A ³»Àû
-	auto e = XMVector3Dot(v, w); //½ÃÀÛÁ¡ B ³»Àû
+	auto a = XMVector3Dot(u, u); // Aï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+	auto b = XMVector3Dot(u, v); // A B ï¿½ï¿½ï¿½ï¿½
+	auto c = XMVector3Dot(v, v); // Bï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+	auto d = XMVector3Dot(u, w); //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ A ï¿½ï¿½ï¿½ï¿½
+	auto e = XMVector3Dot(v, w); //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ B ï¿½ï¿½ï¿½ï¿½
 
 	float a_ = XMVectorGetX(a);
 	float b_ = XMVectorGetX(b);
@@ -525,7 +524,7 @@ CONTACTMF_DESC CBounding_Capsule::ComputeManifold(CBounding_Capsule* pTarget)
 	float sN, sD = D_;
 	float tN, tD = D_;
 
-	if (D_ < 1e-6f) // °ÅÀÇ ÆòÇà
+	if (D_ < 1e-6f) // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	{
 		sN = 0.0f;
 		sD = 1.0f;

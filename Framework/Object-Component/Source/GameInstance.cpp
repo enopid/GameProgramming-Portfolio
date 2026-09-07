@@ -145,7 +145,6 @@ void CGameInstance::Update_Engine()
 
 	_float fTimeDelta = m_pTime_Manager->GetDeltaTime();
 
-	m_FPS = (1.f - 0.1f) * m_FPS + (0.1f) * (1 / fTimeDelta);
 
 	m_pConfig_Manager	->Update(fTimeDelta);
 	m_pTime_Manager		->Update(fTimeDelta);
@@ -154,31 +153,33 @@ void CGameInstance::Update_Engine()
 	m_pDebug_Manager	->Update(fTimeDelta);
 	m_pRhythm_Manager	->Update(fTimeDelta);
 	m_pSequence			->Update(fTimeDelta);
+	m_pInput_Manager	->Update();
+	m_pImGui_Manager	->Update(fTimeDelta);
 
-	m_pInput_Manager->Update();
+	m_pObject_Manager	->Priority_Update(_sCurrentLVL, fTimeDelta);
 
-	m_pImGui_Manager->Update(fTimeDelta);
-	m_pObject_Manager->Priority_Update(_sCurrentLVL, fTimeDelta);
-	m_pPipeLine->Update();
-	m_pListenerUpdater->Update(fTimeDelta);
-	m_pPicking->Update();
+	m_pPipeLine			->Update();
+	m_pListenerUpdater	->Update(fTimeDelta);
+	m_pPicking			->Update();
+	m_pModuleManager	->Update();
 	
 
-	m_pObject_Manager->Update(_sCurrentLVL, fTimeDelta);
-
-	m_pObject_Manager->Late_Update(_sCurrentLVL, fTimeDelta);
+	m_pObject_Manager	->Update(_sCurrentLVL, fTimeDelta);
+	m_pObject_Manager	->Late_Update(_sCurrentLVL, fTimeDelta);
 
 	m_pCollision_Manager->LateUpdate();
 	m_pDSP_Manager		->LateUpdate();
-	m_pModuleManager->Update();
 
 	m_pCollision_Manager->LateUpdate();
 
-	m_pLevel_Manager->Update(fTimeDelta);
+	m_pLevel_Manager	->Update(fTimeDelta);
 	m_pShadow->Update();
 
 	m_pRenderer_Manager->SetUP();
-	m_pRenderer_Manager->SetTimeDelta(fTimeDelta); 
+	m_pRenderer_Manager->SetTimeDelta(fTimeDelta);
+
+
+	m_FPS = (1.f - 0.1f) * m_FPS + (0.1f) * (1 / fTimeDelta);
 }
 
 

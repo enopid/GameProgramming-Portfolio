@@ -29,11 +29,7 @@ HRESULT CCollision_Manager::Add_Collidor(WPCollidor wpCollidor)
 
 void CCollision_Manager::LateUpdate()
 {
-    list<pair<WPCollidor, WPCollidor>> _lstCollisionMaskPairs;
-    list<pair<WPCollidor, WPCollidor>> _lstBroadTestPairs;
-    list<pair<WPCollidor, WPCollidor>> _lstMidTestPairs;
-    list<pair<WPCollidor, WPCollidor>> _lstNarrowTestPairs;
-
+    list<pair<WPCollidor, WPCollidor>> _lstCollisionMaskPairs, _lstBroadTestPairs, _lstMidTestPairs, _lstNarrowTestPairs;
     //Clear
     for (size_t i = 0; i < MAXCOLLISIONMASK; i++) {
         for (auto it = m_lstCorridors[i].begin(); it != m_lstCorridors[i].end(); ) {
@@ -46,45 +42,46 @@ void CCollision_Manager::LateUpdate()
             }
         }
     }
+
     //CheckMask
     for (int _maskIdx1 = 0; _maskIdx1 < MAXCOLLISIONMASK; _maskIdx1++) for (int _maskIdx2 = 0; _maskIdx2 < MAXCOLLISIONMASK; _maskIdx2++) {
         if (!arrCollisionMask[_maskIdx1][_maskIdx2]) continue;
         for (auto _wpCollidor0 : m_lstCorridors[_maskIdx1]) for (auto _wpCollidor1 : m_lstCorridors[_maskIdx2]) {
             if (!_wpCollidor0.lock()->IsActive() || !_wpCollidor1.lock()->IsActive()) continue;
-            if (_wpCollidor0.lock()                 == _wpCollidor1.lock()) continue;
             if (_wpCollidor0.lock()->m_pOwnerObj    == _wpCollidor1.lock()->m_pOwnerObj) continue;
             _lstCollisionMaskPairs.push_back({ _wpCollidor0 , _wpCollidor1 });
         }
     }
     //BroadTest
-    for (auto& [_wpCollidor0, _wpCollidor1] : _lstCollisionMaskPairs) {
+    for (auto& [_wpCollidor0, _wpCollidor1] : _lstCollisionMaskPairs)
         if (_wpCollidor0.lock()->Check_Intersection(_wpCollidor1, CCollidor::ETESTLVL::BROAD))
             _lstBroadTestPairs.push_back({ _wpCollidor0 , _wpCollidor1 });
-    }
     //MidTest
-    for (auto& [_wpCollidor0, _wpCollidor1] : _lstBroadTestPairs) {
+    for (auto& [_wpCollidor0, _wpCollidor1] : _lstBroadTestPairs)
         if (_wpCollidor0.lock()->Check_Intersection(_wpCollidor1, CCollidor::ETESTLVL::MID))
             _lstMidTestPairs.push_back({ _wpCollidor0 , _wpCollidor1 });
-    }
     //NarrowTest
-    for (auto& [_wpCollidor0, _wpCollidor1] : _lstMidTestPairs) {
+    for (auto& [_wpCollidor0, _wpCollidor1] : _lstMidTestPairs)
         if (_wpCollidor0.lock()->Check_Intersection(_wpCollidor1, CCollidor::ETESTLVL::NARROW))
             _lstNarrowTestPairs.push_back({ _wpCollidor0 , _wpCollidor1 });
-    }
-    //Compute Manifold
-    for (auto& [_wpCollidor0, _wpCollidor1] : _lstNarrowTestPairs) {
+   //Compute Manifold
+   for (auto& [_wpCollidor0, _wpCollidor1] : _lstNarrowTestPairs)
         _wpCollidor0.lock()->Compute_Manifolds(_wpCollidor1);
-    }
-    //Execute Func
-    for (size_t i = 0; i < MAXCOLLISIONMASK; i++) for (auto& _wpModel : m_lstCorridors[i])
-    {
-        _wpModel.lock()->Execute_Func();
-    }
-    //Solve Manifold
-    for (size_t i = 0; i < MAXCOLLISIONMASK; i++) for (auto& _wpModel : m_lstCorridors[i])
-    {
-        _wpModel.lock()->TestSolver();
-    }
+   //Execute Enter/Stay/Exit Func
+   for (size_t i = 0; i < MAXCOLLISIONMASK; i++) for (auto& _wpModel : m_lstCorridors[i])
+       _wpModel.lock()->Execute_Func();
+
+   //Solve Manifold
+   int iCnt = 3;
+   for (int idx = 0; idx < iCnt; idx++) {
+       for (auto& [_wpCollidor0, _wpCollidor1] : _lstNarrowTestPairs)
+           _wpCollidor0.lock()->Clear_Manifolds();
+       for (auto& [_wpCollidor0, _wpCollidor1] : _lstNarrowTestPairs) 
+           _wpCollidor0.lock()->Compute_Manifolds(_wpCollidor1);
+       for (size_t i = 0; i < MAXCOLLISIONMASK; i++) for (auto& _wpModel : m_lstCorridors[i])
+           _wpModel.lock()->TestSolver();
+       if (idx >= iCnt - 1) break;
+   }
 }
 
 HRESULT CCollision_Manager::ActiveCollision(_uint _id1, _uint _id2)

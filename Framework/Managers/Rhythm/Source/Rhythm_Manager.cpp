@@ -72,29 +72,21 @@ void CRhythm_Manager::Free()
 
 void CRhythm_Manager::Update(_float fDeltaTime)
 {
-	list<ANIMNOTIFY_DESC> _list;
+	list<ANIMNOTIFY_DESC*> _list;
 	m_fPrevBeat = m_fCurBeat;
-	m_fCurBeat += fDeltaTime * m_fBPM / 60.f;
-
-	while (m_iCurNotifyIdx < m_vecNotifies.size()) {
-		if (m_vecNotifies[m_iCurNotifyIdx].m_fPosition <= m_fCurBeat) {
-			_list.push_back(m_vecNotifies[m_iCurNotifyIdx]);
-			m_iCurNotifyIdx++;
-		}
-		else {
-			break;
-		}
+	m_fCurBeat  += fDeltaTime * m_fBPM / 60.f;
+	
+	while ( m_iCurNotifyIdx < m_vecNotifies.size() 
+			&& m_vecNotifies[m_iCurNotifyIdx].m_fPosition <= m_fCurBeat) { 
+		_list.push_back(&m_vecNotifies[m_iCurNotifyIdx]);
+		m_iCurNotifyIdx++;
 	}
-	for (auto& pNotify : _list)
-	{
-		auto it = m_mapListeners.find(wstring(pNotify.m_sName));
-		if (it != m_mapListeners.end()) {
-			for (auto& upListenr : it->second) {
-				if (pNotify.m_bIsStart)
-					upListenr->Activate(pNotify.m_fDuration);
-				else
-					upListenr->Deactivate();
-			}
+	for (auto& pNotify : _list) { 
+		auto it = m_mapListeners.find(wstring(pNotify->m_sName));
+		if (it == m_mapListeners.end()) continue;
+		for (auto& upListener : it->second) {
+			if (pNotify->m_bIsStart)	upListener->Activate(pNotify->m_fDuration);
+			else						upListener->Deactivate();
 		}
 	}
 
@@ -102,16 +94,14 @@ void CRhythm_Manager::Update(_float fDeltaTime)
 		m_fCurBeat		-= m_iBeat;
 		m_iCurNotifyIdx = 0;
 	}
-
+	
 	for (auto& [_, lstListenrs] : m_mapListeners) {
 		auto it = lstListenrs.begin();
 		while (it != lstListenrs.end()) {
-			if ((*it)->Update(fDeltaTime)) {
+			if ((*it)->Update(fDeltaTime))
 				it = lstListenrs.erase(it);
-			}
-			else {
+			else
 				it++;
-			}
 		}
 	}
 }
