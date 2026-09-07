@@ -2,15 +2,24 @@
 
 콜라이더 등록과 충돌 처리 흐름을 관리합니다.
 
-## 구조
+## 클래스 구조
 
 ```mermaid
-flowchart LR
-    Manager[Collision Manager] --> Component[Collision Component / Collidor]
-    Component --> Shape[AABB / OBB / Sphere / Capsule]
-    Shape --> Contact[Intersection / Manifold]
-    Contact --> Callback[Collision Callback]
+classDiagram
+    CBase <|-- CBounding
+    CBounding <|-- CBounding_AABB
+    CBounding <|-- CBounding_OBB
+    CBounding <|-- CBounding_Sphere
+    CBounding <|-- CBounding_Capsule
+    CComponent <|-- CCollidor
+    CBase <|-- CCollision_Manager
+    CCollidor *-- CBounding : raw owning array 0..3
+    CCollision_Manager --> CCollidor : list weak_ptr
+    CCollidor --> CModel : weak_ptr
+    CCollidor --> CMeshRenderer : weak_ptr
 ```
+
+`<|--` 상속 · `*--` 소유 · `-->` 비소유 참조
 
 ## 포함 파일
 

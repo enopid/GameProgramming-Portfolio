@@ -2,17 +2,24 @@
 
 본 기반 캡슐 콜라이더와 매니폴드 연산, 반복 충돌 해소에 사용한 코드입니다.
 
-## 구조
+## 클래스 구조
 
 ```mermaid
-flowchart LR
-    Object[Game Object] --> Component[Collision Component / Collidor]
-    Component --> Shape[AABB / OBB / Sphere / Capsule]
-    Manager[Collision Manager] --> Component
-    Manager --> Test[Broad / Mid / Narrow Test]
-    Test --> Manifold[Contact Manifold]
-    Manifold --> Solver[Iterative Solver]
+classDiagram
+    CBase <|-- CBounding
+    CBounding <|-- CBounding_AABB
+    CBounding <|-- CBounding_OBB
+    CBounding <|-- CBounding_Sphere
+    CBounding <|-- CBounding_Capsule
+    CComponent <|-- CCollidor
+    CBase <|-- CCollision_Manager
+    CCollidor *-- CBounding : raw owning array 0..3
+    CCollision_Manager --> CCollidor : list weak_ptr
+    CCollidor --> CModel : weak_ptr
+    CCollidor --> CMeshRenderer : weak_ptr
 ```
+
+`<|--` 상속 · `*--` 소유 · `-->` 비소유 참조
 
 ## 포함 파일
 

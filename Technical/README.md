@@ -50,8 +50,8 @@ Kena의 레벨 제작을 위해 Raise·Flatten·Smooth 브러시와 Height 기�
 
 공개 후보: `TerrainRenderer`, `VIBuffer_Terrain`, Height·Splat 편집 코드와 셰이더
 
-## IOCP Network
+## Network Synchronization
 
-Celeste에 IOCP 릴레이 서버를 연동했습니다. 동일 스테이지 선택 전파, 시퀀스 검증, 최근 두 스냅샷 기반 보간, 데드 레커닝과 상태 기반 보정을 구현했습니다.
+Celeste에 네트워크 통신을 연동하고 동일 스테이지 선택 전파, 시퀀스 검증, 최근 두 스냅샷 기반 보간, 데드 레커닝과 상태 기반 보정을 구현했습니다.
 
-공개 후보: `ServerCore`, `CelesteServer`, `NetworkManager`, `ServerSession`, `RemotePlayer`, 프로토콜과 패킷 처리 코드
+공개 범위: `CelesteSession`, `CelesteSessionManager`, `ServerPacketHandler`, `NetworkManager`, `ServerSession`, `RemotePlayer`, 프로토콜과 패킷 처리 코드

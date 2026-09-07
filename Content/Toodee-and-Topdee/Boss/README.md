@@ -2,16 +2,21 @@
 
 FSM 기반 보스 공통 구조와 Ozraeen 구현 코드입니다.
 
-## 구조
+## 클래스 구조
 
 ```mermaid
-flowchart TD
-    Boss[Boss Base] --> Part[Boss Part]
-    Boss --> Ozraeen[Ozraeen]
-    Ozraeen --> Head[Head]
-    Ozraeen --> Body[Body]
-    Ozraeen --> Parts[Parts]
+classDiagram
+    CGameObject <|-- CBoss
+    CGameObject <|-- CBoss_Part
+    CBoss <|-- COzraeen
+    CBoss_Part <|-- COzraeen_Part
+    COzraeen_Part <|-- COzraeen_Head
+    COzraeen_Part <|-- COzraeen_Body
+    CBoss_Part --> CBoss : raw parent reference
+    COzraeen --> COzraeen_Part : list raw references
 ```
+
+`<|--` 상속 · `-->` 비소유 참조
 
 ## 포함 파일
 

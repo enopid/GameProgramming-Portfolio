@@ -2,19 +2,28 @@
 
 Composite·Decorator·Task 노드와 공통 Subtree, 실행 상태 전파를 담당하는 행동 트리 시스템입니다.
 
-## 구조
+## 클래스 구조
 
 ```mermaid
-flowchart TD
-    Tree[BehaviourTree] --> Root[Root Node]
-    Root --> Composite[Composite]
-    Composite --> Sequence[Sequence]
-    Composite --> Selector[Selector / Random Selector]
-    Root --> Decorator[Decorator / CoolDown]
-    Root --> Task[Task / Wait]
-    Sequence --> Result[Success / Failure / Running]
-    Selector --> Result
+classDiagram
+    CBase <|-- CBT_Node
+    CBase <|-- CBehaviourTree
+    CBT_Node <|-- CBT_Composit
+    CBT_Node <|-- CBT_Decorator
+    CBT_Node <|-- CBT_Task
+    CBT_Composit <|-- CBT_Sequence
+    CBT_Composit <|-- CBT_Selector
+    CBT_Composit <|-- CBT_RandomSelector
+    CBT_Decorator <|-- CBT_Decorator_Cooldown
+    CBT_Task <|-- CBT_Task_Wait
+    CBehaviourTree *-- CBlackBoard : unique_ptr
+    CBehaviourTree *-- CBT_Node : unique_ptr root
+    CBT_Composit *-- CBT_Node : vector unique_ptr children
+    CBT_Decorator *-- CBT_Node : unique_ptr child
+    CBT_Node --> CBT_Node : raw parent reference
 ```
+
+`<|--` 상속 · `*--` 소유 · `-->` 비소유 참조
 
 ## 포함 파일
 

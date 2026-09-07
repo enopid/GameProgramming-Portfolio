@@ -2,17 +2,25 @@
 
 페퍼민트·코르시카·마카롱의 일반 공격과 차지 공격에 사용한 코드입니다.
 
-## 구조
+## 클래스 구조
 
 ```mermaid
-flowchart LR
-    Partner[Partner] --> State[Partner State FSM]
-    State --> Peppermint[Peppermint]
-    State --> Korsica[Korsica]
-    State --> Macaron[Macaron]
-    Peppermint --> Projectile[Projectile]
-    Korsica --> Wind[Wind Attack]
+classDiagram
+    CCharacter <|-- CPartner
+    CPartner <|-- CPartner_Character_Peppermint
+    CPartner <|-- CPartner_Character_Korsica
+    CPartner <|-- CPartner_Character_Macaron
+    CFSM <|-- CPartnerState_FSM
+    CFSM <|-- CPartnerBattle_FSM
+    CProjectile <|-- CProjectile_Peppermint_Bullet
+    CGameObject <|-- CKorsica_Wind
+    CPartner *-- CAnimController : unique_ptr array
+    CPartner *-- CPartnerState_FSM : unique_ptr
+    CPartner *-- CPartnerBattle_FSM : unique_ptr
+    CPartner *-- CPartnerGimmic_FSM : unique_ptr
 ```
+
+`<|--` 상속 · `*--` 소유
 
 ## 포함 파일
 

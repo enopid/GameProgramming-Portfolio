@@ -2,16 +2,21 @@
 
 게임 오브젝트의 생명 주기, 컴포넌트 조합, 생성과 복제의 기반 구조입니다.
 
-## 구조
+## 클래스 구조
 
 ```mermaid
-flowchart TD
-    Instance[Game Instance] --> Prototype[Prototype]
-    Prototype --> Object[Game Object Clone]
-    Object --> Component[Components]
-    Object --> LifeCycle[Initialize / Update / Render]
-    Object --> Persistence[Save / Load]
+classDiagram
+    CBase <|-- CGameInstance
+    CBase <|-- CGameObject
+    CBase <|-- CComponent
+    CGameObject *-- CComponent : map vector shared_ptr
+    CComponent --> CGameObject : raw owner reference
+    CGameObject --> CGameObject : raw parent and children
+    CComponent --> CGameInstance : raw reference
+    CGameObject --> CGameInstance : raw reference
 ```
+
+`<|--` 상속 · `*--` 소유 · `-->` 비소유 참조
 
 ## 포함 파일
 

@@ -2,18 +2,29 @@
 
 3D Blend Space, Additive Animation, Aim Offset과 다중 레이어 Pose 합성에 사용한 애니메이션 시스템입니다.
 
-## 구조
+## 클래스 구조
 
 ```mermaid
-flowchart LR
-    Controller[Animation Controller] --> Transition[Transition]
-    Controller --> Node[Animation Node]
-    Node --> Single[Single Animation]
-    Node --> Layer[Layer Animation]
-    Node --> Action[Action Animation]
-    Layer --> Pose[Final Pose]
-    Action --> Pose
+classDiagram
+    CBase <|-- CAnimController
+    CAnimController <|-- CActionAnimController
+    CBase <|-- CAnimNode
+    CAnimNode <|-- CSingleAnimNode
+    CAnimNode <|-- CActionAnimNode
+    CAnimNode <|-- CLayerAnimNode
+    CAnimNode <|-- CLayerActionAnimNode
+    CBase <|-- CAnimTransition
+    ITransitionCondition <|.. CtxValueCondition
+    ITransitionCondition <|.. CtxBlackBoardCondition
+    CAnimController *-- CAnimNode : vector unique_ptr
+    CAnimController *-- CAnimTransition : vector unique_ptr
+    CAnimTransition *-- ITransitionCondition : vector unique_ptr
+    CAnimController --> CModel : weak_ptr
+    CAnimNode --> CModel : weak_ptr
+    CAnimTransition --> CModel : weak_ptr
 ```
+
+`<|--` 상속 · `<|..` 인터페이스 구현 · `*--` 소유 · `-->` 비소유 참조
 
 ## 포함 파일
 

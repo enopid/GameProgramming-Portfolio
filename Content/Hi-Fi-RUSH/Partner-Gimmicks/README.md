@@ -2,17 +2,22 @@
 
 세 파트너의 리듬 판정과 상호작용 기믹에 사용한 코드입니다.
 
-## 구조
+## 클래스 구조
 
 ```mermaid
-flowchart LR
-    FSM[Partner Gimmick FSM] --> Challenge[Rhythm Challenge]
-    FSM --> Interaction[Interaction Object]
-    Challenge --> Macaron[Macaron]
-    Challenge --> Korsica[Korsica]
-    Interaction --> Peppermint[Peppermint Switch]
-    Interaction --> Stage[Wall / Platform / Firegate]
+classDiagram
+    CFSM <|-- CPartnerGimmic_FSM
+    CUIController <|-- CUC_RhythmChallenge_Macaron
+    CUIController <|-- CUC_RhythmChallenge_Korsica
+    CInteractObject <|-- CInteract_Peppermint_Switch
+    CInteract_RhythmChallenge <|-- CInteract_Macaron_Wall
+    CInteract_RhythmChallenge <|-- CInteract_Macaron_Platform
+    CInteract_RhythmChallenge <|-- CInteract_Macaron_MonsterShield
+    CInteract_RhythmChallenge <|-- CInteract_Korsica_PowerPlant
+    CInteract_RhythmChallenge <|-- CInteract_Korsica_Firegate
 ```
+
+`<|--` 상속
 
 ## 포함 파일
 

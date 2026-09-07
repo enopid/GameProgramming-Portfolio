@@ -31,7 +31,7 @@
 
 - [ ] Kena 몬스터 AI는 행동 트리 시스템만 공개할지, 대표 몬스터 사용 예시도 공개할지
 - [ ] Hi-Fi RUSH 파트너 이펙트 코드까지 포함할지
-- [ ] Celeste의 `ServerCore` 전체가 직접 작성한 코드인지
+- [x] Celeste의 `ServerCore`는 외부 기반 코드이므로 공개 범위에서 제외
 - [ ] Toodee and Topdee의 Ozraeen 파츠 코드 전체가 본인 작성분인지
 - [ ] 결과 GIF를 저장소에 넣을지 외부 영상 링크만 제공할지
 

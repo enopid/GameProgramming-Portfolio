@@ -18,7 +18,7 @@ DirectX 9·11과 WinAPI 환경에서 직접 설계하고 구현한 게임 프로
 | [Hybrid Camera](Technical/Hybrid-Camera/README.md) | Toodee and Topdee | 단일 투영 체계<br>FOV·각도 보간<br>표시 범위 기반 거리 계산<br>2D·3D 시점 전환 |
 | [Spline Mesh](Technical/Spline-Mesh/README.md) | Hi-Fi RUSH | Catmull–Rom 경로<br>거리 기반 샘플링<br>위치·방향 계산<br>Vertex Shader 변형 |
 | [Terrain Tool](Technical/Terrain-Tool/README.md) | Kena | Raise·Flatten·Smooth<br>Height 기반 레이어 블렌딩<br>PBR Splat Map |
-| [IOCP Network](Technical/IOCP-Network/README.md) | Celeste | IOCP 릴레이 서버<br>스테이지별 선택 전파<br>Snapshot Interpolation<br>Dead Reckoning·상태 보정 |
+| [Network Synchronization](Technical/IOCP-Network/README.md) | Celeste | 패킷 송수신<br>스테이지별 선택 전파<br>Snapshot Interpolation<br>Dead Reckoning·상태 보정 |
 
 ## 프로젝트 콘텐츠
 
