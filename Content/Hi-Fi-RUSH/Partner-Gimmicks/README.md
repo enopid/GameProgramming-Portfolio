@@ -6,6 +6,8 @@
 
 ```mermaid
 classDiagram
+    CGameObject <|-- CInteractObject
+    CInteractObject <|-- CInteract_RhythmChallenge
     CFSM <|-- CPartnerGimmic_FSM
     CUIController <|-- CUC_RhythmChallenge_Macaron
     CUIController <|-- CUC_RhythmChallenge_Korsica
@@ -19,6 +21,10 @@ classDiagram
 
 `<|--` 상속
 
+## 실행 결과
+
+![페퍼민트 상호작용 기믹](Media/partner-gimmick.gif)
+
 ## 포함 파일
 
 | 구현 단위 | 헤더 | 구현 |
@@ -30,6 +36,8 @@ classDiagram
 | `Interact_Macaron_Platform` | `Include/Interact_Macaron_Platform.h` | `Source/Interact_Macaron_Platform.cpp` |
 | `Interact_Macaron_Wall` | `Include/Interact_Macaron_Wall.h` | `Source/Interact_Macaron_Wall.cpp` |
 | `Interact_Peppermint_Switch` | `Include/Interact_Peppermint_Switch.h` | `Source/Interact_Peppermint_Switch.cpp` |
+| `Interact_RhythmChallenge` | `Include/Interact_RhythmChallenge.h` | `Source/Interact_RhythmChallenge.cpp` |
+| `InteractObject` | `Include/InteractObject.h` | `Source/InteractObject.cpp` |
 | `UC_RhythmChallenge_Korsica` | `Include/UC_RhythmChallenge_Korsica.h` | `Source/UC_RhythmChallenge_Korsica.cpp` |
 | `UC_RhythmChallenge_Macaron` | `Include/UC_RhythmChallenge_Macaron.h` | `Source/UC_RhythmChallenge_Macaron.cpp` |
 

@@ -1,6 +1,6 @@
 # 공개 코드 선정표
 
-실제 파일 복사 전에 공개 범위를 확인하기 위한 문서입니다.
+공개 저장소에 포함한 코드의 선정 기준과 범위를 기록한 문서입니다.
 
 ## 확인한 원본
 
@@ -27,12 +27,13 @@
 - 팀원이 작성한 코드
 - 계정 정보, 절대 경로, 실제 서버 주소
 
-## 확인이 필요한 항목
+## 확인 완료 항목
 
-- [ ] Kena 몬스터 AI는 행동 트리 시스템만 공개할지, 대표 몬스터 사용 예시도 공개할지
-- [ ] Hi-Fi RUSH 파트너 이펙트 코드까지 포함할지
+- [x] Kena 몬스터 AI는 행동 트리 시스템과 `Monster_Stick1` 적용 예시만 공개
+- [x] Hi-Fi RUSH 파트너 전투는 `EnemyShield`, `EnemyBarrier`, `GravitySphere` 포함
+- [x] Hi-Fi RUSH 파트너 기믹은 `InteractObject`, `Interact_RhythmChallenge` 기반 구조와 발전기·벽·스위치 포함
 - [x] Celeste의 `ServerCore`는 외부 기반 코드이므로 공개 범위에서 제외
-- [ ] Toodee and Topdee의 Ozraeen 파츠 코드 전체가 본인 작성분인지
-- [ ] 결과 GIF를 저장소에 넣을지 외부 영상 링크만 제공할지
+- [x] Toodee and Topdee의 Ozraeen 파츠 코드는 전체 공개
+- [x] 포트폴리오·기술문서에 사용한 GIF 중 대표 결과만 선별해 포함
 
 Hi-Fi RUSH 매니저는 기존 우선 공개 목록에 `Rhythm_Manager`만 추가합니다. 그 외 매니저는 현재 공개 대상에서 제외합니다.

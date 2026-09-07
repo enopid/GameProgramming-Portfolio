@@ -21,6 +21,10 @@ classDiagram
 
 `<|--` 상속 · `*--` 소유 · `-->` 비소유 참조
 
+## 실행 결과
+
+![동적 본 캡슐 콜라이더](Media/dynamic-bone-collider.gif)
+
 ## 포함 파일
 
 | 구현 단위 | 헤더 | 구현 |

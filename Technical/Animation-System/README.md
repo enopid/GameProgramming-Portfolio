@@ -26,6 +26,10 @@ classDiagram
 
 `<|--` 상속 · `<|..` 인터페이스 구현 · `*--` 소유 · `-->` 비소유 참조
 
+## 실행 결과
+
+![3D Blend Space](Media/blend-space.gif)
+
 ## 포함 파일
 
 | 구현 단위 | 헤더 | 구현 |

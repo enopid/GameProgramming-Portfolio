@@ -11,7 +11,7 @@ DirectX 9·11과 WinAPI 환경에서 직접 설계하고 구현한 게임 프로
 | 기술 | 프로젝트 | 내용 |
 |---|---|---|
 | [Animation System](Technical/Animation-System/README.md) | Kena | 3D Blend Space<br>Additive Animation<br>Aim Offset<br>Multi-Layer Pose |
-| [Behaviour Tree](Technical/Behaviour-Tree/README.md) | Kena | Composite·Decorator·Task<br>공통 상태 Subtree<br>실행 흐름 시각화 |
+| [Behaviour Tree](Technical/Behaviour-Tree/README.md) | Kena | Composite·Decorator·Task<br>공통 상태 Subtree<br>Stick 적용 예시<br>실행 흐름 시각화 |
 | [Collision System](Technical/Collision-System/README.md) | Kena<br>Hi-Fi RUSH | 본 기반 Capsule Collider<br>Manifold<br>Iterative Solver<br>다단계 충돌 검사 |
 | [PBR Rendering](Technical/PBR-Rendering/README.md) | Kena | Cook–Torrance BRDF<br>Deferred Rendering<br>Split-Sum IBL<br>IBL 사전 계산 텍스처 |
 | [Cartoon Outline](Technical/Cartoon-Outline/README.md) | Hi-Fi RUSH | Inverted Hull<br>Depth·Normal Edge Detection<br>거리·시야각 두께 보정 |
@@ -27,7 +27,7 @@ DirectX 9·11과 WinAPI 환경에서 직접 설계하고 구현한 게임 프로
 | 기술 | 프로젝트 | 내용 |
 |---|---|---|
 | [Script Cutscene](Content/Hi-Fi-RUSH/Cutscene/README.md) | Hi-Fi RUSH | Act 단위 스크립트<br>카메라·대사·UI<br>이펙트·사운드 제어 |
-| [Partner Combat](Content/Hi-Fi-RUSH/Partner-Combat/README.md) | Hi-Fi RUSH | 페퍼민트: 배리어·레이저<br>코르시카: 화염·회오리<br>마카롱: 실드·경직 |
+| [Partner Combat](Content/Hi-Fi-RUSH/Partner-Combat/README.md) | Hi-Fi RUSH | 페퍼민트: 배리어·레이저<br>코르시카: 화염·회오리<br>마카롱: 실드·중력장<br>실드·배리어 파괴 연출 |
 | [Partner Gimmicks](Content/Hi-Fi-RUSH/Partner-Gimmicks/README.md) | Hi-Fi RUSH | 페퍼민트: Aim Offset·원거리 조작<br>마카롱: 리듬 판정·파괴 벽<br>코르시카: 리듬 판정·기믹 연동 |
 | [Locomotion·Hair](Content/Celeste/Locomotion-and-Hair/README.md) | Celeste | 이동·점프·벽타기<br>2단 대시<br>다관절 머리카락 |
 | [Auto Tiling](Content/Celeste/Auto-Tiling/README.md) | Celeste | 스테이지 에디터<br>인접 타일 Bitmask<br>Atlas 자동 선택<br>연결 타일 갱신 |

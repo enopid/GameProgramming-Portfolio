@@ -14,20 +14,31 @@ classDiagram
     CFSM <|-- CPartnerBattle_FSM
     CProjectile <|-- CProjectile_Peppermint_Bullet
     CGameObject <|-- CKorsica_Wind
+    CWeapon <|-- CEnemyShield
+    CGameObject <|-- CEnemyBarrier
+    CGameObject <|-- CGravitySphere
     CPartner *-- CAnimController : unique_ptr array
     CPartner *-- CPartnerState_FSM : unique_ptr
     CPartner *-- CPartnerBattle_FSM : unique_ptr
     CPartner *-- CPartnerGimmic_FSM : unique_ptr
+    CPartner_Character_Macaron --> CGravitySphere : raw references
 ```
 
-`<|--` 상속 · `*--` 소유
+`<|--` 상속 · `*--` 소유 · `-->` 비소유 참조
+
+## 실행 결과
+
+![페퍼민트 전투](Media/partner-combat.gif)
 
 ## 포함 파일
 
 | 구현 단위 | 헤더 | 구현 |
 |---|---|---|
+| `EnemyBarrier` | `Include/EnemyBarrier.h` | `Source/EnemyBarrier.cpp` |
+| `EnemyShield` | `Include/EnemyShield.h` | `Source/EnemyShield.cpp` |
 | `FSM_PartnerBattle` | `Include/FSM_PartnerBattle.h` | `Source/FSM_PartnerBattle.cpp` |
 | `FSM_PartnerState` | `Include/FSM_PartnerState.h` | `Source/FSM_PartnerState.cpp` |
+| `GravitySphere` | `Include/GravitySphere.h` | `Source/GravitySphere.cpp` |
 | `Korsica_Wind` | `Include/Korsica_Wind.h` | `Source/Korsica_Wind.cpp` |
 | `Partner` | `Include/Partner.h` | `Source/Partner.cpp` |
 | `Partner_Character_Korsica` | `Include/Partner_Character_Korsica.h` | `Source/Partner_Character_Korsica.cpp` |

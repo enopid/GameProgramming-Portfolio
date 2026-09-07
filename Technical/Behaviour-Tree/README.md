@@ -21,9 +21,15 @@ classDiagram
     CBT_Composit *-- CBT_Node : vector unique_ptr children
     CBT_Decorator *-- CBT_Node : unique_ptr child
     CBT_Node --> CBT_Node : raw parent reference
+    CMonster <|-- CMonster_Stick1
+    CMonster_Stick1 ..> CBehaviourTree : builds
 ```
 
-`<|--` 상속 · `*--` 소유 · `-->` 비소유 참조
+`<|--` 상속 · `*--` 소유 · `-->` 비소유 참조 · `..>` 의존
+
+## 실행 결과
+
+![행동 트리 실행 상태 시각화](Media/behaviour-tree-debug.gif)
 
 ## 포함 파일
 
@@ -39,5 +45,6 @@ classDiagram
 | `BT_Sequence` | `Include/BT_Sequence.h` | `Source/BT_Sequence.cpp` |
 | `BT_Task` | `Include/BT_Task.h` | `Source/BT_Task.cpp` |
 | `BT_Task_Wait` | `Include/BT_Task_Wait.h` | `Source/BT_Task_Wait.cpp` |
+| `Example/Stick/Monster_Stick1` | `Example/Stick/Include/Monster_Stick1.h` | `Example/Stick/Source/Monster_Stick1.cpp` |
 
 > 전체 프로젝트의 빌드 의존성은 포함하지 않았으며, 구현 흐름을 확인하는 데 필요한 범위까지만 선별했습니다.

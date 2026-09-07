@@ -19,6 +19,10 @@ classDiagram
 
 `<|--` 상속 · `-->` 비소유 사용/참조
 
+## 실행 결과
+
+![Lightning 기믹](Media/lightning.gif)
+
 ## 포함 파일
 
 | 구현 단위 | 헤더 | 구현 |

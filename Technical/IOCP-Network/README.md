@@ -20,6 +20,10 @@ classDiagram
 
 > `PacketSession`, `ClientService`, `CObject`는 외부 기반 클래스/의존성으로 구현 코드는 공개 범위에서 제외했습니다.
 
+## 실행 결과
+
+![지연 환경의 원격 플레이어 보정](Media/network-latency.gif)
+
 ## 포함 파일
 
 | 구현 단위 | 헤더 | 구현 |

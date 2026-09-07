@@ -2,6 +2,10 @@
 
 높이 편집 브러시와 PBR Splat Map 페인팅에 사용한 코드와 셰이더입니다.
 
+## 실행 결과
+
+![PBR Splat Map 편집 결과](Media/terrain-splat-pbr.gif)
+
 ## 포함 파일
 
 | 구현 단위 | 헤더 | 구현 |
