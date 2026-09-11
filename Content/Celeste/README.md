@@ -3,7 +3,7 @@
 - WinAPI 개인 프로젝트
 - 개발 기간: 2025.04–2025.05
 
-## 공개 예정 콘텐츠
+## 공개 콘텐츠
 
 - [로코모션과 다관절 머리카락](Locomotion-and-Hair/README.md)
 - [오토 타일링](Auto-Tiling/README.md)

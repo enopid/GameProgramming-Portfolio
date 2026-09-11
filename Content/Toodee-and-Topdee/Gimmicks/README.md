@@ -21,9 +21,21 @@ classDiagram
 
 ## 실행 결과
 
-### Lightning 기믹
+### 연속 반사 레이저
 
-![Lightning 기믹](Media/lightning.gif)
+![연속 반사 레이저](Media/laser.gif)
+
+### 오브젝트 풀 기반 포탑
+
+![오브젝트 풀 기반 포탑](Media/fire-turret.gif)
+
+### 낙뢰 기믹
+
+![낙뢰 기믹](Media/lightning.gif)
+
+### 그리드 기반 박스 상호작용
+
+![그리드 기반 박스 상호작용](Media/box.gif)
 
 ## 포함 파일
 

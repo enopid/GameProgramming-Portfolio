@@ -4,6 +4,10 @@ Cook–Torrance BRDF 직접광과 Split-Sum IBL을 구성하는 셰이더입니�
 
 ## 실행 결과
 
+### Shader Ball IBL
+
+![Shader Ball IBL](Media/shader-ball.gif)
+
 ### 직접광과 IBL 통합 결과
 
 ![직접광과 IBL 통합 결과](Media/pbr-integration.gif)

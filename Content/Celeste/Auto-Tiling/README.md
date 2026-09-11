@@ -16,6 +16,16 @@ classDiagram
 
 `<|--` 상속 · `-->` 비소유 사용/참조
 
+## 실행 결과
+
+### 타일 배치와 자동 연결
+
+[타일 배치와 자동 연결 영상 보기](Media/auto-tiling-placement.mp4)
+
+### 인접 타일 갱신
+
+[인접 타일 갱신 영상 보기](Media/auto-tiling-update.mp4)
+
 ## 포함 파일
 
 | 구현 단위 | 헤더 | 구현 |

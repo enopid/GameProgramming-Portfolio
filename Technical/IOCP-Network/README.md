@@ -18,6 +18,19 @@ classDiagram
 
 `<|--` 상속 · `*--` 소유 · `-->` 비소유 사용/참조
 
+## 통신 구조
+
+```mermaid
+flowchart LR
+    LP[Local Player] -->|입력 패킷| NM[CNetworkManager]
+    NM -->|C2S 패킷| SS[ServerSession]
+    SS --> RS[Relay Server]
+    RS -->|선택 전파| CS[CelesteSession]
+    CS --> CSM[CelesteSessionManager]
+    CSM -->|S2C 패킷| NM2[Remote Client NetworkManager]
+    NM2 -->|Snapshot Interpolation / Dead Reckoning| RP[CRemotePlayer]
+```
+
 > `PacketSession`, `ClientService`, `CObject`는 외부 기반 클래스/의존성으로 구현 코드는 공개 범위에서 제외했습니다.
 
 ## 실행 결과

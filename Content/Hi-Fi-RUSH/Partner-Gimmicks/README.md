@@ -23,9 +23,21 @@ classDiagram
 
 ## 실행 결과
 
-### 페퍼민트 상호작용 기믹
+### 페퍼민트 기믹
 
-![페퍼민트 상호작용 기믹](Media/partner-gimmick.gif)
+![페퍼민트 기믹](Media/partner-gimmick.gif)
+
+### 코르시카 기믹
+
+![코르시카 기믹](Media/korsica-gimmick.gif)
+
+### 마카롱 기믹
+
+![마카롱 기믹](Media/macaron-gimmick.gif)
+
+## 전체 시연 영상
+
+[Hi-Fi RUSH 담당 구간 보기](https://youtu.be/093V56PwwEg?t=163)
 
 ## 포함 파일
 

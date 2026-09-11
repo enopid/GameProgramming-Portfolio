@@ -32,6 +32,18 @@ classDiagram
 
 ![페퍼민트 전투](Media/partner-combat.gif)
 
+### 코르시카 전투
+
+![코르시카 전투](Media/korsica-combat.gif)
+
+### 마카롱 전투
+
+![마카롱 전투](Media/macaron-combat.gif)
+
+## 전체 시연 영상
+
+[Hi-Fi RUSH 담당 구간 보기](https://youtu.be/093V56PwwEg?t=163)
+
 ## 포함 파일
 
 | 구현 단위 | 헤더 | 구현 |
