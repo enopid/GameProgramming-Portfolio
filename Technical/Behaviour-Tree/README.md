@@ -29,6 +29,8 @@ classDiagram
 
 ## 실행 결과
 
+### 행동 트리 실행 상태 시각화
+
 ![행동 트리 실행 상태 시각화](Media/behaviour-tree-debug.gif)
 
 ## 포함 파일

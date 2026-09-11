@@ -23,6 +23,16 @@ classDiagram
 
 ## 실행 결과
 
+### 반복 충돌 해소
+
+![반복 충돌 해소](Media/iterative-solver.gif)
+
+### 본 기반 콜라이더
+
+![본 기반 콜라이더](Media/bone-collider.gif)
+
+### 동적 본 캡슐 콜라이더
+
 ![동적 본 캡슐 콜라이더](Media/dynamic-bone-collider.gif)
 
 ## 포함 파일

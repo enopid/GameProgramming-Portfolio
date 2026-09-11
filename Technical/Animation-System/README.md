@@ -28,7 +28,21 @@ classDiagram
 
 ## 실행 결과
 
+### 3D Blend Space
+
 ![3D Blend Space](Media/blend-space.gif)
+
+### 가산 포즈 합성
+
+![가산 포즈 합성](Media/additive-pose.gif)
+
+### Aim Offset
+
+![Aim Offset](Media/aim-offset.gif)
+
+### 다중 레이어 액션 합성
+
+![다중 레이어 액션 합성](Media/layered-action.gif)
 
 ## 포함 파일
 

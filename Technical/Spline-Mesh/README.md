@@ -4,7 +4,13 @@ Catmull–Rom 경로 샘플링과 정점 변형을 이용한 스플라인 메시
 
 ## 실행 결과
 
+### 스플라인 경로 편집
+
 ![스플라인 경로 편집](Media/spline-editor.gif)
+
+### 게임 내 스플라인 적용 결과
+
+![게임 내 스플라인 적용 결과](Media/spline-runtime.gif)
 
 ## 포함 파일
 

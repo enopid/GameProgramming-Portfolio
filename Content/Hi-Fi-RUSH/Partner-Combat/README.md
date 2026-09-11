@@ -28,6 +28,8 @@ classDiagram
 
 ## 실행 결과
 
+### 페퍼민트 전투
+
 ![페퍼민트 전투](Media/partner-combat.gif)
 
 ## 포함 파일

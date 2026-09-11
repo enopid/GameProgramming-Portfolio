@@ -4,7 +4,9 @@ Inverted Hull과 깊이·노멀 기반 후처리 외곽선에 사용한 셰이�
 
 ## 실행 결과
 
-![시야각 변화에 따른 외곽선 보정](Media/outline-fov.gif)
+### 카툰 외곽선 렌더링 결과
+
+![카툰 외곽선 렌더링 결과](Media/cartoon-outline.gif)
 
 ## 포함 파일
 

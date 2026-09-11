@@ -23,6 +23,8 @@ classDiagram
 
 ## 실행 결과
 
+### 페퍼민트 상호작용 기믹
+
 ![페퍼민트 상호작용 기믹](Media/partner-gimmick.gif)
 
 ## 포함 파일

@@ -4,7 +4,17 @@
 
 ## 실행 결과
 
-![PBR Splat Map 편집 결과](Media/terrain-splat-pbr.gif)
+### 높이 편집 브러시
+
+![높이 편집 브러시](Media/height-editing.gif)
+
+### Splat Map 페인팅
+
+![Splat Map 페인팅](Media/splat-painting.gif)
+
+### PBR 지형 렌더링 결과
+
+![PBR 지형 렌더링 결과](Media/terrain-splat-pbr.gif)
 
 ## 포함 파일
 

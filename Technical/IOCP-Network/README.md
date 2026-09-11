@@ -22,6 +22,8 @@ classDiagram
 
 ## 실행 결과
 
+### 지연 환경의 원격 플레이어 보정
+
 ![지연 환경의 원격 플레이어 보정](Media/network-latency.gif)
 
 ## 포함 파일

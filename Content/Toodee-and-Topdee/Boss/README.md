@@ -25,6 +25,8 @@ classDiagram
 
 ## 실행 결과
 
+### Ozraeen 보스전
+
 ![Ozraeen 보스전](Media/ozraeen.gif)
 
 ## 포함 파일

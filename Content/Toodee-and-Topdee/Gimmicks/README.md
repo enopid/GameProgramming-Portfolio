@@ -21,6 +21,8 @@ classDiagram
 
 ## 실행 결과
 
+### Lightning 기믹
+
 ![Lightning 기믹](Media/lightning.gif)
 
 ## 포함 파일
